@@ -1,0 +1,26 @@
+.ft_bold{font-family:arial;color:"#666666";font-size:9pt;text-decoration:none;font-weight:normal}
+.ft_arial{font-family:arial;color:"black";font-size:9pt}
+.ft_head{font-family:arial;color:"black";font-size:11pt;font-weight:bold}
+.ft_bold_1{font-family:arial;font-weight:bold;font-size:9pt}
+.ft_small{font-family:arial;font-size:9pt}
+.smallbold{font-family:arial;font-size:9pt;font-weight:normal}
+.ft_bold_2{font-family:arial;color:"black";font-size:9pt;text-decoration:none}
+.ft_bold_3{font-family:arial;color:"blue";font-size:9pt;text-decoration:none}
+.bold_text{font-weight:normal;font-size:8pt;font-family:arial;color:#666666;text-decoration:none}
+.bsmalltext {font-weight:bold;font-size:8pt;font-family:arial;color:#000099}
+.white_bold_text{font-weight:bold;font-size:12px;font-family:arial;color:#000000}
+.bold_red_text{font-weight:bold;font-size:8pt;font-family:arial;text-decoration:none;color:#FF6600}
+.footer_red_text{font-weight:bold;font-size:9px;font-family:arial;color:#ff0000}
+.text1 {  font-family: Arial, Helvetica, sans-serif; font-size: 11pt; font-style: normal; font-weight: bold; color: #000000}
+.text2 {  font-family: Arial, Helvetica, sans-serif; font-size: 8pt; font-style: normal; font-weight: bold; color: #000000}
+.text1small {  font-family: Arial, Helvetica, sans-serif; font-size: 9pt; font-style: normal; font-weight: normal; color:  #666666}
+.text2small {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt; font-style: normal; font-weight: bold; color:  #000099}
+.text3 {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt; font-style: normal; font-weight: bold; color:  #FF6633}
+.bold_blue_text{font-weight:bold;font-size:8pt;font-family:arial;color:#000099}
+.bold_red_text1{font-weight:bold;font-size:12px;font-family:arial;text-decoration:underline;color:#ff0000}
+.input {BORDER-RIGHT: #525200 1px solid; BORDER-TOP: #525200 1px solid; FONT-SIZE: 11px;BORDER-LEFT: #525200 1px solid; COLOR: #525200; BORDER-BOTTOM: #525200 1px solid; FONT-FAMILY: Verdana, arial}
+.bold{font-weight:bold;font-size:8pt;font-family:arial;color:#666666;text-decoration:none}
+.italic{font-weight:italic;font-size:8pt;font-family:arial;color:#666666;text-decoration:none}
+.regular{font-weight:regular;font-size:8pt;font-family:arial;color:#666666;text-decoration:none}
+.bold_italic{font-weight:normal;font-size:8pt;font-family:arial;color:#666666;text-decoration:none}
+.input1 {border-right: #525200 1px solid; border-top: #525200 1px solid; font-size: 11px;border-left: #525200 1px solid; font-weight: bold; color: #ff3333; background: #cccc33; border-bottom: #525200 1px solid; font-family: verdana, arial}
