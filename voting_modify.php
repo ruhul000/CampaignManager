@@ -1,12 +1,7 @@
 <?php
-
-ob_start();
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-
-
-echo "<br>Voting mod: ".$compName = $_REQUEST["cpName"];
 $errorlog=($_REQUEST["errorlog"]!="")?$_REQUEST["errorlog"]:0;
 $flag=($_REQUEST["flag"]!="")?$_REQUEST["flag"]:0;
 $action=$_REQUEST["action"];
@@ -53,7 +48,7 @@ $aliastxt=$_REQUEST["aliastxt"];
 $shortcode=$_REQUEST["shortcode"];
 
 $checkscore=$_REQUEST["checkscore"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 $msg_alert=$_REQUEST["msg_alert"];
 $act_status=$_REQUEST["act_status"];
 
@@ -587,11 +582,6 @@ function make_locdt(dtobj,dtstr){
 							</tr>
 							<tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
 
-<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-
 							<tr height="16" bgcolor="#D9D9A8">
 								<td align="center" class="WorkGreen" colspan="3"><input type="button" onclick="voting_submit('voting_modify','2')" class="submit1" value="Modify Here!!!" style="background-image:url('images/menu1.gif');" tabindex="27"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -603,7 +593,6 @@ function make_locdt(dtobj,dtstr){
 	print "<input type=\"hidden\" name=\"action\" value=\"2\">";
 	print "<input type=\"hidden\" name=\"locdt\" value =" . $locdt . ">";
 	print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
-	print "<input type=\"hidden\" name=\"cpName\" value ='" . $compName. "'>";
 ?>
 						</table>
 					</td>

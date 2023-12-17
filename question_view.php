@@ -1,12 +1,7 @@
 <?php
-
-ob_Start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-
-$compName = $_REQUEST["cpName"];
 
 $treeview_cod = $_REQUEST["treeview_cod"];
 $login_form = $_REQUEST["login"];
@@ -25,7 +20,7 @@ if($msg_alert==""){
 }
 
 /************GET GROUP DETAIL***********/
-$sqlquery = "select ques_no, question, a, b, c, d, active_status, max_options, ans from contest_questions where id='" . $qstn_id . "' and contest_id='" . $cntsid . "'  order by ques_no asc";
+$sqlquery = "select ques_no, question, a, b, c, d, active_status, max_options, ans from contest_questions where id='" . $qstn_id . "' and contest_id='" . $cntsid . "' and login='" . $login_form . "' order by ques_no asc";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row = mysql_fetch_row($result)){
 	$ques_no = $row[0];
@@ -40,7 +35,7 @@ while($row = mysql_fetch_row($result)){
 }
 
 /*****************GET contest NAME***************/
-$sqlquery = "select contest_name, max_options,welcome_message,score_type,contest_footer_message from contest_detail where contest_id='" . $cntsid . "' and companyName='" . $compName . "'";
+$sqlquery = "select contest_name, max_options,welcome_message,score_type,contest_footer_message from contest_detail where contest_id='" . $cntsid . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row = mysql_fetch_row($result)){
 	$cnts_name = $row[0];
@@ -67,7 +62,7 @@ if ($ques_no == 1){
 }
 
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -117,12 +112,8 @@ return true
 			<table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
 				<TR height="26">
 					<TD width="354px" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Question View</TD>
-					<TD width="146px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="contest_question.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cntsid; ?>&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/AQuestion1.gif';" onmouseout="this.src='images/AQuestion0.gif'" src="images/AQuestion0.gif" border="0"/></a></TD>
-					
-					
-					<TD width="118px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="question_modify.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&question_id=<? echo $qstn_id; ?>&cnts_id=<? echo $cntsid; ?>&flag=1&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/EQuestion1.gif';" onmouseout="this.src='images/EQuestion0.gif'" src="images/EQuestion0.gif" border="0"/></a></TD>
-					
-					
+					<TD width="146px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="contest_question.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cntsid; ?>&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/AQuestion1.gif';" onmouseout="this.src='images/AQuestion0.gif'" src="images/AQuestion0.gif" border="0"/></a></TD>
+					<TD width="118px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="question_modify.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&question_id=<? echo $qstn_id; ?>&cnts_id=<? echo $cntsid; ?>&flag=1&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/EQuestion1.gif';" onmouseout="this.src='images/EQuestion0.gif'" src="images/EQuestion0.gif" border="0"/></a></TD>
 					<TD width="130px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm(' Are you sure you want to delete this contest question?')==true){document.ques_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DQuestion1.gif';" onmouseout="this.src='images/DQuestion0.gif'" src="images/DQuestion0.gif" border="0"/></a></TD>
 				</TR>
 
@@ -202,7 +193,6 @@ return true
 	print "<input type =hidden name=action value =\"3\">";
 	print "<input type =hidden name=treeview_cod value =$treeview_cod>";
 	print "<input type =hidden name=smenu value =$smenu>";
-	print "<input type =hidden name=cpName value ='". $compName . "'>";
 ?>
 							</table>
 							</td>

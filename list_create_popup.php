@@ -27,7 +27,7 @@ require("gui_common.php");
 $login_form=$_REQUEST["login"];
 $msg_alert=$_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 
 $schlr_name = $_REQUEST["schlr_name"];
 $target_id = $_REQUEST["target_id"];

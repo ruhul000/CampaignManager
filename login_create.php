@@ -23,21 +23,23 @@ hheader($smenu);
 tree_code ();
 workareatop_new();
 ?>
-
-
-<form name="login_create" id="login_create" action="login_update.php" method="post">
-<table align="left" border="0" cellspacing="1" cellpadding="0" width="748px" bgcolor="#525200">
+<form name="login_create" id="login_create" action="login_update.php"
+	method="post">
+<table align="left" border="0" cellspacing="1" cellpadding="0"
+	width="748px" bgcolor="#525200">
 	<tr>
 		<td>
-		<table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
-			<tr height="26">
-				<td align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Login Creation</td>
-				<td class="WorkWht" background="images/trgt_hdr1.gif" align="right"></td>
-			</td>
+		<table align="center" border="0" cellspacing="0" cellpadding="0"
+			width="748px" bgcolor="#f4f4e4">
+			<TR height="26">
+				<TD align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+					src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Login Creation</TD>
+				<TD class="WorkWht" background="images/trgt_hdr1.gif" align="right"></TD>
+			</TR>
 			<tr>
 				<td colspan="2">
-				<table align="left" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#525200">
+				<table align="left" border="0" cellspacing="0" cellpadding="0"
+					width="748px" bgcolor="#525200">
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td width="230px"></td>
 						<td width="340px"></td>
@@ -46,13 +48,12 @@ workareatop_new();
 
 					<?if (strlen($msg_alert) > 0){?>
 					<tr height="16px" bgcolor="#D9D9A8">
-						<td colspan="3" align="center" class="bold_red_text">&nbsp;&nbsp;<?echo $msg_alert; ?></td>
+						<TD colspan="3" align="center" class="bold_red_text">&nbsp;&nbsp;<?echo $msg_alert; ?></TD>
 					</tr>
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>
 					<?}?>
-					
 					<!--<tr height="16px" bgcolor="#D9D9A8">
 						<td align="right" valign="top" class="WorkGreen">CP
 						Name&nbsp;:&nbsp;</TD>
@@ -67,14 +68,14 @@ workareatop_new();
 					</tr>-->
 
 					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Login Name&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="text" name="login_name" id="login_name" size="45" class="input" 
-								onmouseover="showIT('Enter the login name.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
+						<td align="right" valign="top" class="WorkGreen">Login
+						Name&nbsp;:&nbsp;</TD>
+						<td align="left" valign="top" class="WorkGreen"><input type="text"
+							name="login_name" value="<? echo $login_name; ?>" size="45"
+							class="input" onmouseover="showIT('Enter the Group name.')"
+							onmouseout="showIT()" /></TD>
+						<TD>&nbsp;</TD>
+					</TR>
 
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
@@ -82,95 +83,22 @@ workareatop_new();
 
 					<tr height="16px" bgcolor="#D9D9A8">
 						<td align="right" valign="top" class="WorkGreen">Password&nbsp;:&nbsp;</TD>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="password" name="password" id="password" size="45" class="input" 
-								onmouseover="showIT('Enter the password.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Name&nbsp;:&nbsp;</TD>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="text" name="name" id="name"size="45" class="input" 
-							    onmouseover="showIT('Enter the name.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-					
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Company Name&nbsp;:&nbsp;</TD>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="text" name="company_name" id="company_name"  size="45" class="input" 
-							    onmouseover="showIT('Enter the company name.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
-					
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Address&nbsp;:&nbsp;</TD>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="text" name="address" id="address" size="45" class="input" 
-							    onmouseover="showIT('Enter the address.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Email&nbsp;:&nbsp;</TD>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="text" name="email" id="email" size="45" class="input" 
-							    onmouseover="showIT('Enter the email address.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Contact No&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" class="WorkGreen">
-							<input type="text" name="contact_no" id="contact_no" size="45" class="input" 
-							    onmouseover="showIT('Enter the contact number.')"
-								onmouseout="showIT()" />
-						</td>
-						<td>&nbsp;</td>
-					</tr>
+						<td align="left" valign="top" class="WorkGreen"><input type="password"
+							name="password" value="<? echo $login_name; ?>" size="45"
+							class="input" onmouseover="showIT('Enter the Group name.')"
+							onmouseout="showIT()" /></TD>
+						<TD>&nbsp;</TD>
+					</TR>
 
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>
 
 					<tr height="16" bgcolor="#D9D9A8">
-						<td align="center" class="WorkGreen" colspan="3">
-							<input type="button" class="submit1" value="Create Here!!!"
-								onclick="login_submit('login_create');"
-								style="background-image: url('images/menu1.gif');" tabindex="33" />
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						</td>
+						<td align="center" class="WorkGreen" colspan="3"><input
+							type="button" class="submit1" value="Create Here!!!"
+							onclick="login_submit('login_create');"
+							style="background-image: url('images/menu1.gif');" tabindex="33" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
@@ -190,7 +118,9 @@ workareatop_new();
 	</tr>
 </table>
 </form>
-<div id="TTipes" style="position: absolute; height: 25px; z-index: 1; display: none; visibility: hidden;"></div>
+<div
+	id="TTipes"
+	style="position: absolute; height: 25px; z-index: 1; display: none; visibility: hidden;"></div>
 					<?
 					workareabottom();
 					ffooter;

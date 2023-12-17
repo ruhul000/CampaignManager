@@ -3,7 +3,6 @@ require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 
-echo "Cp MOd: ".$compName = $_REQUEST["cpName"];
 $treeview_cod = $_REQUEST["treeview_cod"];
 $login_form = $_REQUEST["login"];
 $sess_id=$_REQUEST["sess_id"];

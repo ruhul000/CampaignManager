@@ -1,10 +1,8 @@
 <?php
-
-ob_start();
 require("template.php");
 require("gui_common.php");
 //header("Content-type: text/html; charset=windows-874");
-$compName = $_REQUEST["cpName"];
+
 $login_form = $_REQUEST["login"];
 $msg_alert = $_REQUEST["msg_alert"];
 $treeview_cod = $_REQUEST["treeview_cod"];
@@ -13,7 +11,7 @@ $smenu=$_REQUEST["smenu"];
 $list_id = $_REQUEST["list_id"];
 
 if ($list_id != "") {
-	$sqlquery = "select scheduler_name,target_id,start_date,end_date,sms_id,no_of_sms,active_status,status,sender_id from list_detail where id='" . $list_id . "' and companyName='" . $compName  . "'";
+	$sqlquery = "select scheduler_name,target_id,start_date,end_date,sms_id,no_of_sms,active_status,status,sender_id from list_detail where id='" . $list_id . "' and login_created='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	while($row = mysql_fetch_row($result)){
@@ -40,14 +38,14 @@ if ($list_id != "") {
 	}
 }
 
-$sqlquery = "select target_name from target_detail where target_id='" . $target_id . "' and companyName='" . $compName  . "'";
+$sqlquery = "select target_name from target_detail where target_id='" . $target_id . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 while($row = mysql_fetch_row($result)){
 	$target_name = $row[0];
 }
 
-$sqlquery = "select message,sms_mode,footer_url,language from rules_detail where archive!=1 and sms_id='" . $rule_id . "' and companyName='" . $compName  . "'";
+$sqlquery = "select message,sms_mode,footer_url,language from rules_detail where archive!=1 and sms_id='" . $rule_id . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 while($row = mysql_fetch_row($result)){
@@ -98,11 +96,8 @@ if(!$schlr_name){
 			<table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
 				<TR height="28px">
 					<TD width="626px" align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Scheduler Creation</TD>
-					
-					<TD width="70px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="list_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&list_id=<? echo $list_id; ?>&sender_id=<?=$sender_id ?>&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/ESchedule1.gif';" onmouseout="this.src='images/ESchedule0.gif'" src="images/ESchedule0.gif" border="0"/></a></TD>	
-					
-					
-					<TD width="80px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are you sure you want to delete <? echo $schlr_name;?> schedule?')==true){document.list_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DSchedule1.gif';" onmouseout="this.src='images/DSchedule0.gif'" src="images/DSchedule0.gif" border="0"/></a></TD>	
+					<TD width="70px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="list_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&list_id=<? echo $list_id; ?>&sender_id=<?=$sender_id ?>&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/ESchedule1.gif';" onmouseout="this.src='images/ESchedule0.gif'" src="images/ESchedule0.gif" border="0"/></a></TD>	<!-- <img onmouseover="this.src='images/EContest1.gif';" onmouseout="this.src='images/EContest0.gif'" src="images/EContest0.gif" border="0"/> -->
+					<TD width="80px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are you sure you want to delete <? echo $schlr_name;?> schedule?')==true){document.list_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DSchedule1.gif';" onmouseout="this.src='images/DSchedule0.gif'" src="images/DSchedule0.gif" border="0"/></a></TD>	<!-- <img onmouseover="this.src='images/DContest1.gif';" onmouseout="this.src='images/DContest0.gif'" src="images/DContest0.gif" border="0"/> -->
 				</tr>
 				<tr>
 					<td colspan="3">
@@ -190,7 +185,6 @@ if(!$schlr_name){
 	print "<input type=\"hidden\" name=\"schlr_name\" value=" . $schlr_name . ">";
 	print "<input type=\"hidden\" name=\"target_id\" value=" . $target_id . ">";
 	print "<input type=\"hidden\" name=\"list_id\" value=" . $list_id . ">";
-	print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
 ?>
                         </table>
                     </td>

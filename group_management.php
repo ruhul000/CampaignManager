@@ -2,8 +2,6 @@
 require("gui_common.php");
 require("template.php");
 
-
-ehco "Group MGM: ".$compName = $_REQUEST["cpName"];
 $smenu=$_REQUEST["smenu"];
 $action=$_REQUEST["action"];
 $treeview_cod=$_REQUEST["treeview_cod"];
@@ -18,13 +16,12 @@ $gid = $_REQUEST["gid"];
 $sgid = $_REQUEST["sgid"];
 $act = $_REQUEST["act"];
 $subgid = $sgid;
-
 if ($act == 4){
 	$sgid = "";
 }
 
 if ($subgrp_name == ""){
-	$sqlquery = "select distinct subgroup_name, description, active_status from subgroup_detail where subgroup_id='" . $sgid . "' and companyName='" . $compName. "' limit 1";
+	$sqlquery = "select distinct subgroup_name, description, active_status from subgroup_detail where subgroup_id='" . $sgid . "' and login='" . $login_form . "' limit 1";
 	//echo $sqlquery;
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
@@ -38,7 +35,7 @@ if ($subgrp_name == ""){
 	}
 }
 
-$sqlquery = "select distinct group_name, description, active_status from group_detail where group_id='" . $gid . "' and companyName='" . $compName. "' limit 1";
+$sqlquery = "select distinct group_name, description, active_status from group_detail where group_id='" . $gid . "' and login='" . $login_form . "' limit 1";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 $j = 0;
@@ -63,7 +60,7 @@ if($msg_alert==""){
 }else{
 	$msg=$msg_alert;
 }
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -129,10 +126,8 @@ if ($sg == 1){
 		<table align="center" border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#f4f4e4">
 			<TR>
 				<TD height="26" width="70%" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Group Management</TD>
-				<TD height="26" width="10%" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_management.php?login=<? echo $login_form ?>&gid=<? echo $gid ?>&sgid=<? echo $subgid ?>&act=4&sg=<? echo $sg ?>&cpName=<? echo $compName ?>">Add New</a></TD>
-				
-				<TD height="26" width="10%" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_management.php?login=<? echo $login_form ?>&gid=<? echo $gid ?>&sgid=<? echo $subgid ?>&act=2&sg=<? echo $sg ?>&cpName=<? echo $compName ?>">Edit</a></TD>
-				
+				<TD height="26" width="10%" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_management.php?login=<? echo $login_form ?>&gid=<? echo $gid ?>&sgid=<? echo $subgid ?>&act=4&sg=<? echo $sg ?>">Add New</a></TD>
+				<TD height="26" width="10%" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_management.php?login=<? echo $login_form ?>&gid=<? echo $gid ?>&sgid=<? echo $subgid ?>&act=2&sg=<? echo $sg ?>">Edit</a></TD>
 				<TD height="26" width="10%" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_management.php?login=<? echo $login_form ?>&gid=<? echo $gid ?>&sgid=<? echo $subgid ?>&act=3&sg=<? echo $sg ?>">Delete</a></TD>
 			</TR>
 			<TR>
@@ -235,10 +230,7 @@ if ($sg == 1){
 							</TR>
 						<?}?>
 						<TR><TD  bgcolor="#D9D9A8" colspan="3" height="8"></TD></TR>
-	<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
+
 						<?if ($act != 1){?>
 							<TR>
 								<TD colspan="3" ALIGN="center"  bgcolor="#D9D9A8" ><img onmouseover="this.src='images/Submit_Rollout.png';" onmouseout="this.src='images/Submit_Rollover.png'" src="images/Submit_Rollover.png" value="Submit" onClick="cnts_submit()"></TD>
@@ -256,7 +248,6 @@ if ($sg == 1){
 <?print "<input type=hidden name=sg value=$sg>";?>
 <?print "<input type=hidden name=gid value=$gid>";?>
 <?print "<input type=hidden name=sgid value=$subgid>";?>
-<?print "<input type=hidden name=cpName value= '".$compName."'>";?>
 
 </FORM>
 <?}?>

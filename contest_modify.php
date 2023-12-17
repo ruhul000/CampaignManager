@@ -1,12 +1,7 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-echo "Modify: ".$compName = $_REQUEST["cpName"];
-
 $errorlog=($_REQUEST["errorlog"]!="")?$_REQUEST["errorlog"]:0;
 $flag=($_REQUEST["flag"]!="")?$_REQUEST["flag"]:0;
 $action=$_REQUEST["action"];
@@ -53,7 +48,7 @@ $off_msg=$_REQUEST["off_msg"];
 $over_msg=$_REQUEST["over_msg"];
 
 $checkscore=$_REQUEST["checkscore"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 $msg_alert=$_REQUEST["msg_alert"];
 $act_status=$_REQUEST["act_status"];
 
@@ -64,7 +59,7 @@ if($msg_alert=="" || stripos($msg_alert,"Contest Successfully Updated!!!")!==fal
 	$msg=$msg_alert;
 }
 if($flag){
-	$sqlquery = "select contest_name,welcome_message,contest_type,start_date,end_date,score,score_neg_status,negative_marking,cummulative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,smskey_status,key_alias_status,question_status,question_size,score_type,max_options,off_message,contest_over_message,contest_footer_message,active_status,footer_link,footer_sept,diplay_add from contest_detail where contest_id='" . $cntsid . "' and companyName='" . $compName. "' limit 1";
+	$sqlquery = "select contest_name,welcome_message,contest_type,start_date,end_date,score,score_neg_status,negative_marking,cummulative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,smskey_status,key_alias_status,question_status,question_size,score_type,max_options,off_message,contest_over_message,contest_footer_message,active_status,footer_link,footer_sept,diplay_add from contest_detail where contest_id='" . $cntsid . "' and login='" . $login_form . "' limit 1";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	while($row=mysql_fetch_row($result)){
 		$cnts_name=$row[0];
@@ -603,11 +598,6 @@ function make_locdt(dtobj,dtstr){
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)"  onClick="javascript:window.open('errorlog.php','error','width=634 height=260 scrollbars=yes')" class="WorkRed" <?if($errorlog){echo "style=\"display:inline\"";}else{echo "style=\"display:none\"";}?>>Click here to view error logs</a></td>
               </tr>
               <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
-              
-                 <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
 
               <tr height="16" bgcolor="#D9D9A8">
                 <td align="center" class="WorkGreen" colspan="3"><input type="button" onclick="contest_submit('contest_modify','2')" class="submit1" value="Modify Here!!!" style="background-image:url('images/menu1.gif');" tabindex="27"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

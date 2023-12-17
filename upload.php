@@ -1,5 +1,4 @@
 <?php
-require("config.php");
 function upload_files ($tag,$destn){
 	global $checkValue;
 	$file_name=$_FILES[$tag]["name"];
@@ -11,7 +10,7 @@ function upload_files ($tag,$destn){
 			return upload_file_error($file_err);
 		}else{
 			$destn=create_folder($destn);
-			$destn=$destn . DIR_SEPERATOR . $file_name;
+			$destn=$destn . "/" . $file_name;
 			if(is_file($destn) && $checkValue != 1 )
 				return "Uploading file already exist.";
 			move_uploaded_file($tmp_name,$destn);
@@ -36,7 +35,7 @@ function upload_banner ($tag,$destn){
 			return upload_file_error($file_err);
 		}else{
 			$destn=create_folder($destn);
-			$destn=$destn . DIR_SEPERATOR . $file_name;
+			$destn=$destn . "/" . $file_name;
 
 			//echo "<br>" . $destn;
 
@@ -51,20 +50,19 @@ function create_folder($folder){
 
 	//echo "<br>folder = " . $folder;
 
-	$tmp=explode(DIR_SEPERATOR,trim($folder,DIR_SEPERATOR));
+	$tmp=explode('/',trim($folder,'/'));
 	for($i=0;$i<count($tmp);$i++){
-		$path=$path . DIR_SEPERATOR . $tmp[$i];
+		$path=$path . '/' . $tmp[$i];
 		if(!is_dir($path)){
 			//echo "<br>path = " . $path;
 			mkdir($path, 0777);
 		}
-		
 	}
-	return getcwd() . DIR_SEPERATOR . $folder;
+	return getcwd() . "/" . $folder;
 }
 
 function delete_dir($path){
-	$temp = str_replace(DIR_SEPERATOR.DIR_SEPERATOR,DIR_SEPERATOR,$path) . DIR_SEPERATOR;
+	$temp = str_replace("//","/",$path) . "/";
 	if(is_dir($temp)){
 		$handle = opendir($temp);
 		for (;false !== ($file = readdir($handle));){
@@ -89,8 +87,8 @@ function copy_dir($srcdir, $dstdir) {
 		if($handle=opendir($srcdir)) {
 			while($file = readdir($handle)) {
 				if($file != '.' && $file != '..'){
-					$srcfile=$srcdir . DIR_SEPERATOR . $file;
-					$dstfile=$dstdir . DIR_SEPERATOR . $file;
+					$srcfile=$srcdir . '/' . $file;
+					$dstfile=$dstdir . '/' . $file;
 
 					if(is_file($srcfile)){
 						copy($srcfile, $dstfile);
@@ -178,13 +176,11 @@ function file_parse($path,$delema){
 /******'****UNZIP BULK UPLOAD FILE********/
 function unzip_bulk_file($zipfile, $zip_pth)
 {
-	
-	//$zip = zip_open($zipfile);
-	/*while($zip_entry = zip_read($zip))
+	$zip = zip_open($zipfile);
+	while($zip_entry = zip_read($zip))
 	{
 		zip_entry_open($zip, $zip_entry);
-//echo zip_entry_name($zip_entry);
-		if(substr(zip_entry_name($zip_entry), -1) == DIR_SEPERATOR)
+		if(substr(zip_entry_name($zip_entry), -1) == '/')
 		{
 			$zdir = substr(zip_entry_name($zip_entry), 0, -1);
 			$zdir = $zip_pth . $zdir;
@@ -197,14 +193,14 @@ function unzip_bulk_file($zipfile, $zip_pth)
 		}
 		else
 		{
-			$name = str_replace('/',DIR_SEPERATOR,zip_entry_name($zip_entry));
+			$name = zip_entry_name($zip_entry);
 			$name = $zip_pth . $name;
-			$fopen = fopen($name, "wb+");
+			$fopen = fopen($name, "w");
 			fwrite($fopen, zip_entry_read($zip_entry, zip_entry_filesize($zip_entry)), zip_entry_filesize($zip_entry));
 		}
 		zip_entry_close($zip_entry);
 	}
-	zip_close($zip);*/
+	zip_close($zip);
 	return true;
 }
 
@@ -212,7 +208,7 @@ function unzip_bulk_file($zipfile, $zip_pth)
 function config_parser($field){
 	$banner_size = array();
 
-	$adconfig_filename = getcwd() . DIR_SEPERATOR . "config.txt";
+	$adconfig_filename = getcwd() . "/" . "config.txt";
 	$file_name = fopen($adconfig_filename,"r");
 
 	$file_data = fread($file_name,filesize($adconfig_filename));
@@ -231,7 +227,7 @@ function config_parser($field){
 }
 
 
-function validator ($bulk_path,$banner_size,&$sqlquery_banner,$field_type){
+function validator ($bulk_path,$banner_size,$sqlquery_banner,$field_type){
 
 	global $login_form;
 
@@ -285,8 +281,6 @@ function validator ($bulk_path,$banner_size,&$sqlquery_banner,$field_type){
 		$sqlquery_banner=$sqlquery_banner . $sqlvalue;
 		make_error_log($logs,$field_type);
 	}
-	$errflinefeed;
-	
 	return $errflinefeed;
 }
 
@@ -299,7 +293,7 @@ function make_error_log($arr_logs,$field_type){
 		$filetext=$filetext . implode('|#|',$arr_logs[$cnt]) . '|##|';
 	}
 
-	$filename=getcwd() .DIR_SEPERATOR. "error.log";
+	$filename=getcwd() . "/error.log";
 	$fp=fopen($filename,$mode);
 	fwrite($fp,$filetext,strlen($filetext));
 	fclose($fp);
@@ -328,7 +322,7 @@ function content_sort($arrlist,$field){
 		for($cnt=1;$cnt<$max;$cnt++){
 			$temp[$cnt]=$arrlist[$cnt][$ind];
 		}
-		asort($temp,3);
+		asort(&$temp,3);
 
 		$cnt=1;
 		$temp_sort[0]=$arrlist[0];

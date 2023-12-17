@@ -1,11 +1,5 @@
-<?php 
-
-ob_start();
-require("config.php");
-require("upload.php");
+<?php require("upload.php");
 require("gui_common.php");
-
-
 
 $trgt_name=$_REQUEST['trgt_name'];
 $trgt_selctn=$_REQUEST['trgt_selctn'];
@@ -18,7 +12,6 @@ $sess_id=$_REQUEST['sess_id'];
 $page=$_REQUEST['page'];
 $smenu=$_REQUEST['smenu'];
 
-$compName=$_REQUEST['cpName'];
 $location=$_REQUEST["host_ip"];
 $database=$_REQUEST["db_name"];
 $username=$_REQUEST["db_user"];
@@ -35,13 +28,16 @@ $daily_target=$_REQUEST["dailytarget"];
 //echo $daily_target;
 //die();
 
-$baseurl="Location: target.php?login=" . $login_form . "&sess_id=" . $sess_id . "&page=" . $page . "&smenu=" . $smenu . "&trgt_name=" . $trgt_name . "&trgt_selctn=" . $trgt_selctn . "&cbo_group=" . $grp_id . "&cbo_sgroup=" . $sgrp_id . "&dailytarget=" . $daily_target . "&cbo_sgroup=" . $sgrp_id. "&cpName=" . $compName;
+
+
+
+$baseurl="Location: target.php?login=" . $login_form . "&sess_id=" . $sess_id . "&page=" . $page . "&smenu=" . $smenu . "&trgt_name=" . $trgt_name . "&trgt_selctn=" . $trgt_selctn . "&cbo_group=" . $grp_id . "&cbo_sgroup=" . $sgrp_id . "&dailytarget=" . $daily_target . "&cbo_sgroup=" . $sgrp_id;
 
 if($trgt_selctn==2){
-	$urlstr="&host_ip=" . $location . "&db_name=" . $database . "&db_user=" . $username . "&db_pwd=" . $password . "&dbsatus=" . $dbsatus. "&cpName=" . $compName;
+	$urlstr="&host_ip=" . $location . "&db_name=" . $database . "&db_user=" . $username . "&db_pwd=" . $password . "&dbsatus=" . $dbsatus;
 }
 
-echo $revert=$baseurl . $urlstr;
+$revert=$baseurl . $urlstr;
 
 if (!$trgt_name){
     $msg_alert = "Please Enter Unique Target Name";
@@ -81,15 +77,15 @@ if (!$trgt_name){
     die();
 }
 
-$destn="uploads" .DIR_SEPERATOR. $login_form . DIR_SEPERATOR . getfolder($grp_id,$sgrp_id) . DIR_SEPERATOR . $trgt_name;
-
+$destn="uploads/" . $login_form . "/" . getfolder($grp_id,$sgrp_id) . "/" . $trgt_name;
 
 if($trgt_selctn==1){
+
 	$tag="file";
 	$flag=1;
 	$path=upload_files ($tag,$destn);
 
-	if(strrpos($path,DIR_SEPERATOR)===false){
+	if(strrpos($path,"/")===false){
 		$flag=0;
 		header($revert . "&msg_alert=" . $path);
 		die();
@@ -102,7 +98,7 @@ if($trgt_selctn==1){
 			header($revert . "&msg_alert=" . $msg_alert);
 			die();
 		}else{
-			$tar_id=insert_target_detail($trgt_name,$path,$grp_id,$sgrp_id,$daily_target,$compName);
+			$tar_id=insert_target_detail($trgt_name,$path,$grp_id,$sgrp_id,$daily_target);
 			$msg_alert = 'Target Successfully Created';
 			$pop=1;
 
@@ -124,15 +120,14 @@ else if($trgt_selctn==2){
 
 	$path=create_folder($destn);
 
-	$path=$path . DIR_SEPERATOR . $yr . $mon . $da . $hor . $min . $ss . '.csv';
-	$tar_id=insert_target_detail($trgt_name,$path,$grp_id,$sgrp_id,$daily_target,$compName);
-	
+	$path=$path . "/" . $yr . $mon . $da . $hor . $min . $ss . '.csv';
+
+	$tar_id=insert_target_detail($trgt_name,$path,$grp_id,$sgrp_id,$daily_target);
+	die();
+
+
 	$msg_alert = 'Target Successfully Created';
 	$pop=1;
-	//$baseurl="Location: target.php?login=" . $login_form . "&sess_id=" . $sess_id . "&page=2&smenu=" . $smenu . "&trgt_name=" . $trgt_name . "&trgt_selctn=" . $trgt_selctn . "&cbo_group=" . $grp_id . "&cbo_sgroup=" . $sgrp_id . "&dailytarget=" . $daily_target . "&cbo_sgroup=" . $sgrp_id;
-
-	//$revert=$baseurl . $urlstr;
-
 	header($revert . "&msg_alert=" . $msg_alert."&pop=1");
 	die();
 
@@ -154,14 +149,14 @@ function check_target_availability($target_name)
 }
 
 
-function insert_target_detail($trgt_name,$path,$grp_id,$sgrp_id,$daily_target,$compName)
+function insert_target_detail($trgt_name,$path,$grp_id,$sgrp_id,$daily_target)
 {
-   global $login_form,$compName;
+   global $login_form;
 
    if ($daily_target==""){
    	$daily_target = 0;
    }
-   $sqlquery = "insert into target_detail (target_name,file_path,group_id,subgroup_id,target_status,login,daily_new_target,target_date,companyName) values ('" . $trgt_name . "','" . addslashes($path) . "','" . $grp_id . "','" . $sgrp_id . "','1', '" . $login_form . "', '0', now(),'".$compName."')";
+   $sqlquery = "insert into target_detail (target_name,file_path,group_id,subgroup_id,target_status,login,daily_new_target,target_date) values ('" . $trgt_name . "','" . $path . "','" . $grp_id . "','" . $sgrp_id . "','1', '" . $login_form . "', '0', now())";
 
    $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
    return mysql_insert_id();

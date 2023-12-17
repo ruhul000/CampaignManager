@@ -1,7 +1,4 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 
@@ -12,15 +9,14 @@ $grp_name = $_REQUEST["grp_name"];
 $grp_desc = $_REQUEST["grp_desc"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-$compName = $_REQUEST["cpName"];
-//die();
+
 if($msg_alert==""){
     $msg="Group Creation Choose";
 }else{
     $msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -69,11 +65,6 @@ workareatop_new();
                             </TR>
 
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
-         <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-                            
 
                             <tr height="16" bgcolor="#D9D9A8">
                                 <td align="center" class="WorkGreen" colspan="3"><input type="button" class="submit1" value="Create Here!!!" onclick="group_submit('group_create');" style="background-image:url('images/menu1.gif');" tabindex="33"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -85,7 +76,6 @@ workareatop_new();
     print "<input type=\"hidden\" name=\"action\" value=\"1\">";
     print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
     print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
-     print "<input type=\"hidden\" name=\"cpName\" value=" . $compName. ">";
 ?>
                         </table>
                     </td>

@@ -3,14 +3,12 @@ require("template.php");
 require("gui_common.php");
 //header("Content-type: text/html; charset=windows-874");
 
-echo "dddd: ".$compName = $_REQUEST["cpName"];
-//die();
 $login_form = $_REQUEST["login"];
 $msg_alert = $_REQUEST["msg_alert"];
 $treeview_cod = $_REQUEST["treeview_cod"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 
 $schlr_name = $_REQUEST["schlr_name"];
 $target_id = $_REQUEST["target_id"];
@@ -23,7 +21,7 @@ $e_minute=$_REQUEST["e_minute"];
 $list_id = $_REQUEST["list_id"];
 $msgln = $_REQUEST["msgln"];
 
-$sqlquery = "select target_id, target_name from target_detail where companyName='" . $compName . "'";
+$sqlquery = "select target_id, target_name from target_detail where login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 $cnt=0;
@@ -61,7 +59,7 @@ $maxsms=count($arr_sms_id);
 
 
 if ($list_id != "") {
-	$sqlquery = "select scheduler_name,target_id,start_date,end_date,rule_id,no_of_sms,status,sms_type,sender_id from list_detail where id='" . $list_id . "' and companyName='" . $compName . "'";
+	$sqlquery = "select scheduler_name,target_id,start_date,end_date,rule_id,no_of_sms,status,sms_type,sender_id from list_detail where id='" . $list_id . "' and login_created='" . $login_form . "'";
 	//echo $sqlquery;
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
@@ -151,17 +149,11 @@ function make_locdt(dtobj,dtstr){
 <?
 workareatop_new();
 
-if(!$maxtg or !$maxsms)
-{
-	$msg="";
-	$msg1="SMS Traget";
-	$msg2="SMS Message";
-	
-	if(!$maxtg && !$maxsms) 
-	{
+if(!$maxtg or !$maxsms){
+	$msg="";$msg1="SMS Traget";$msg2="SMS Message";
+	if(!$maxtg && !$maxsms) {
 		$msg=$msg1 . " And " . $msg2;
-	}
-	else if(!$maxtg){
+	}else if(!$maxtg){
 		$msg=$msg1;
 	}else if(!$maxsms){
 		$msg=$msg2;
@@ -441,10 +433,7 @@ if(!$maxtg or !$maxsms)
 					            </td>
                             	</tr>
                             	<tr height="8px" bgcolor="#d9d9a8"><td colspan="4"></td></tr>
-							<!-- Hidden Company name field -->
-                            				<td align="left" valign="top" class="WorkGreen">
-                                   			    <input type="hidden" name="cpName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            				</TD>
+
 
 							<tr height="16" bgcolor="#D9D9A8">
 								<td align="center" class="WorkGreen" colspan="4"><input type="button" class="submit1" value="Modify Here!!!" onclick="list_submit('list_create');" style="background-image:url('images/menu1.gif');" tabindex="33"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

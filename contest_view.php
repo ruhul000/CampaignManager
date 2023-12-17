@@ -1,13 +1,8 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate");
 
-
-$compName = $_REQUEST["cpName"];
 $login_form = $_REQUEST["login"];
 $sess_id=$_REQUEST["sess_id"];
 $cnts_id = $_REQUEST["cnts_id"];
@@ -16,11 +11,9 @@ $msg_alert = $_REQUEST["msg_alert"];
 $cntsname = $_REQUEST["cnts_name"];
 $smenu=$_REQUEST["smenu"];
 
-$sqlquery = "select contest_name,welcome_message,contest_type,start_date,end_date,score,score_neg_status,negative_marking,cummulative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,smskey_status,key_alias_status,question_status,question_size,score_type,max_options,off_message,contest_over_message,contest_footer_message,active_status,footer_link,footer_sept,diplay_add,header_upload,footer_upload from contest_detail where contest_id='" . $cnts_id . "' and companyName='" . $compName . "' limit 1";
+$sqlquery = "select contest_name,welcome_message,contest_type,start_date,end_date,score,score_neg_status,negative_marking,cummulative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,smskey_status,key_alias_status,question_status,question_size,score_type,max_options,off_message,contest_over_message,contest_footer_message,active_status,footer_link,footer_sept,diplay_add,header_upload,footer_upload from contest_detail where contest_id='" . $cnts_id . "' and login='" . $login_form . "' limit 1";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
-
 while($row=mysql_fetch_row($result)){
-	
 	$cnts_name=$row[0];
 	$welcome_msg=$row[1];
 	$cnts_type=$row[2];
@@ -140,7 +133,7 @@ if(!$cnts_name){
 						<TR height="28px">
 							<TD width="312px" align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Contest Management</TD>
 							<TD width="146px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="contest_question.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&v_flag=<? echo $v_flag ?>&cnts_id=<? echo $cnts_id ?>&cnt=1&sg=<? echo $sg ?>&smenu=<? echo $smenu ?>"><img onmouseover="this.src='images/AQuestion1.gif';" onmouseout="this.src='images/AQuestion0.gif'" src="images/AQuestion0.gif" border="0"/></a></TD>
-							<TD width="86px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="contest_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&flag=1&cnts_id=<? echo $cnts_id ?>&action=2&smenu=<? echo $smenu ?>&cpName=<? echo $compName ?>"><img onmouseover="this.src='images/EContest1.gif';" onmouseout="this.src='images/EContest0.gif'" src="images/EContest0.gif" border="0"/></a></TD>
+							<TD width="86px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="contest_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&flag=1&cnts_id=<? echo $cnts_id ?>&action=2&smenu=<? echo $smenu ?>"><img onmouseover="this.src='images/EContest1.gif';" onmouseout="this.src='images/EContest0.gif'" src="images/EContest0.gif" border="0"/></a></TD>
 							<TD width="102px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:document.contest_view.cnt.value='1';if (confirm(' Are you sure you want to delete this contest?')==true){document.contest_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DContest1.gif';" onmouseout="this.src='images/DContest0.gif'" src="images/DContest0.gif" border="0"/></a></TD>
 							<TD width="102px" align="left" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="question_import.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cnts_id; ?>&smenu=<? echo $smenu ?>"><img onmouseover="this.src='images/Import1.gif';" onmouseout="this.src='images/Import0.gif'" src="images/Import0.gif" border="0"/></a></TD><!-- &act=4&cnt=1 -->
 						</tr>
@@ -364,7 +357,6 @@ print "<input type =hidden name=cnt value='0'>";
 print "<input type =hidden name=action value =3>";
 print "<input type =hidden name=treeview_cod value =$treeview_cod>";
 print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
-print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
 ?>
 
 

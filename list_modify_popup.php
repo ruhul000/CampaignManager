@@ -16,7 +16,7 @@ $msg_alert = $_REQUEST["msg_alert"];
 //$treeview_cod = $_REQUEST["treeview_cod"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 
 $schlr_name = $_REQUEST["schlr_name"];
 $target_id = $_REQUEST["target_id"];

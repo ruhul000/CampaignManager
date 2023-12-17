@@ -1,7 +1,4 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 
@@ -14,17 +11,15 @@ $sgrp_name = $_REQUEST["sgrp_name"];
 $sgrp_desc = $_REQUEST["sgrp_desc"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-echo "Sub Group: ".$compName = $_REQUEST["cpName"];
 
-//die();
 if($msg_alert==""){
     $msg="Sub Group Creation Choose";
 }else{
     $msg=$msg_alert;
 }
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
-$validgroup=group_exist($grp_id,$grp_name,$compName);
+$validgroup=group_exist($grp_id,$grp_name);
 
 hheader($smenu);
 tree_code ();
@@ -99,11 +94,7 @@ if(!$validgroup){
                                 <TD>&nbsp;</TD>
                             </TR>
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
- <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-                            
+
                             <tr height="16" bgcolor="#D9D9A8">
                                 <td align="center" class="WorkGreen" colspan="3"><input type="button" class="submit1" value="Create Here!!!" onclick="subgroup_submit('subgroup_create');" style="background-image:url('images/menu1.gif');" tabindex="33"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             </tr>
@@ -116,7 +107,6 @@ if(!$validgroup){
     print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
     print "<input type=\"hidden\" name=\"grp_name\" value=" . $grp_name . ">";
     print "<input type=\"hidden\" name=\"grp_id\" value=" . $grp_id . ">";
-        print "<input type=\"hidden\" name=\"cpName\" value=" . $compName . ">";
 ?>
                         </table>
                     </td>

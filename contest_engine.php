@@ -1,12 +1,6 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
-
-$compName = $_REQUEST["cpName"];
-
 
 $action=$_REQUEST["action"];
 $treeview_cod=$_REQUEST["treeview_cod"];
@@ -55,7 +49,7 @@ $shortcode=$_REQUEST["shortcode"];
 $checksmsalias=$_REQUEST["checksmsalias"];
 
 $checkscore=$_REQUEST["checkscore"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 $msg_alert=$_REQUEST["msg_alert"];
 
 if($msg_alert==""){
@@ -63,7 +57,7 @@ if($msg_alert==""){
 }else{
 	$msg=$msg_alert;
 }
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 
 $myFile = "conf.txt";
@@ -502,7 +496,7 @@ function make_locdt(dtobj,dtstr){
 
 					<tr height="16" bgcolor="#D9D9A8">
 						<td align="right" class="WorkGreen">Questions Type&nbsp;:&nbsp;</td>
-						<td align="left" class="WorkGreen">Limited No's&nbsp;:&nbsp;<input
+						<td align="left" class="WorkGreen">Limited No’s&nbsp;:&nbsp;<input
 							type="radio" name="ques_type"
 							<?if($ques_type==1) echo "checked=\"checked\""; ?> value="1"
 							onmouseover="showIT('Fixed number of contest questions')"
@@ -701,15 +695,7 @@ function make_locdt(dtobj,dtstr){
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>
-					
-					
-   <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-                            
-                            
-                            
+
 					<tr height="16" bgcolor="#D9D9A8">
 						<td align="center" class="WorkGreen" colspan="3"><input
 							type="button" onclick="contest_submit('contest_form','1')"
@@ -726,7 +712,6 @@ function make_locdt(dtobj,dtstr){
 					print "<input type=\"hidden\" name=\"locdt\" value =" . $locdt . ">";
 					print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
 					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
-					print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
 					?>
 				</table>
 				</td>

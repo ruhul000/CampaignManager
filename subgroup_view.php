@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require("gui_common.php");
 require("template.php");
 
@@ -9,10 +8,9 @@ $sgrp_id = $_REQUEST["sgrp_id"];
 $msg_alert = $_REQUEST["msg_alert"];
 $smenu=$_REQUEST["smenu"];
 $sess_id=$_REQUEST["sess_id"];
-echo "subGRP-View: ".$compName = $_REQUEST["cpName"];
 
 if ($grp_id && $sgrp_id) {
-    $sqlquery = "select grp.group_name, sgrp.subgroup_name, sgrp.description, sgrp.active_status from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.group_id='" . $grp_id . "' and sgrp.subgroup_id='" . $sgrp_id . "' and sgrp.companyName='" . $compName . "'";
+    $sqlquery = "select grp.group_name, sgrp.subgroup_name, sgrp.description, sgrp.active_status from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.group_id='" . $grp_id . "' and sgrp.subgroup_id='" . $sgrp_id . "' and sgrp.login='" . $login_form . "'";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
     while($row = mysql_fetch_row($result)){
@@ -29,7 +27,7 @@ if($msg_alert==""){
     $msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -61,11 +59,8 @@ if(!$sgrp_name){
             <table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
                 <tr height="26">
                     <td width="430px" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Sub Group Management</TD>
-                    
-                    <td width="102px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="subgroup_create.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&grp_name=<? echo $grp_name ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&cpName=<? echo  $compName ?>"><img onmouseover="this.src='images/ASGroup1.gif';" onmouseout="this.src='images/ASGroup0.gif'" src="images/ASGroup0.gif" border="0"/></a></TD>
-                    
-                    <td width="101px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="subgroup_modify.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&grp_name=<? echo $grp_name ?>&action=2&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&sgrp_id=<? echo $sgrp_id ?>&cpName=<? echo  $compName ?>"><img onmouseover="this.src='images/ESGroup1.gif';" onmouseout="this.src='images/ESGroup0.gif'" src="images/ESGroup0.gif" border="0"/></a></TD>
-                    
+                    <td width="102px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="subgroup_create.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&grp_name=<? echo $grp_name ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>"><img onmouseover="this.src='images/ASGroup1.gif';" onmouseout="this.src='images/ASGroup0.gif'" src="images/ASGroup0.gif" border="0"/></a></TD>
+                    <td width="101px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="subgroup_modify.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&grp_name=<? echo $grp_name ?>&action=2&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&sgrp_id=<? echo $sgrp_id ?>"><img onmouseover="this.src='images/ESGroup1.gif';" onmouseout="this.src='images/ESGroup0.gif'" src="images/ESGroup0.gif" border="0"/></a></TD>
                     <td width="115px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are you sure you want to delete <? echo $sgrp_name; ?> Sub Group?')==true){document.subgroup_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DSGroup1.gif';" onmouseout="this.src='images/DSGroup0.gif'" src="images/DSGroup0.gif" border="0"/></a></TD>
                 </tr>
                  <tr>
@@ -113,11 +108,6 @@ if(!$sgrp_name){
                         </TR>
 
                         <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
-                        
-    <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
 <?
     print "<input type=\"hidden\" name=\"login\" value=" . $login_form . ">";
     print "<input type=\"hidden\" name=\"sess_id\" value=" . $sess_id . ">";
@@ -127,7 +117,6 @@ if(!$sgrp_name){
     print "<input type=\"hidden\" name=\"grp_id\" value=" . $grp_id . ">";
     print "<input type=\"hidden\" name=\"sgrp_id\" value=" . $sgrp_id . ">";
     print "<input type=\"hidden\" name=\"sgrp_name\" value=" . $sgrp_name . ">";
-     print "<input type=\"hidden\" name=\"cpName\" value=" . $compName. ">";
 ?>
                         </table>
                     </td>

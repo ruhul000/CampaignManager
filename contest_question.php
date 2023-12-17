@@ -1,12 +1,8 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 
-echo "CQ: ".$compName = $_REQUEST["cpName"];
 $login_form = $_REQUEST["login"];
 $sess_id = $_REQUEST["sess_id"];
 $msg_alert = $_REQUEST["msg_alert"];
@@ -38,7 +34,7 @@ workareatop_new();
 $ques_no = contest_qestion_detail ($cntsid);
 
 /************GET GROUP DETAIL***********/
-echo $sqlquery = "select contest_name, max_options, welcome_message, contest_type, start_date, end_date, off_message, contest_over_message,active_status,score_type,contest_footer_message from contest_detail where contest_id='" . $cntsid . "' and companyName='" . $compName . "'";
+$sqlquery = "select contest_name, max_options, welcome_message, contest_type, start_date, end_date, off_message, contest_over_message,active_status,score_type,contest_footer_message from contest_detail where contest_id='" . $cntsid . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row = mysql_fetch_row($result)){
 	$cnts_name=$row[0];
@@ -243,15 +239,8 @@ document.question_form.prev.value = header_val;
 									<td align="left" bgcolor="#D9D9A8">
 										<textarea READONLY onMouseOver="showIT('Preview of the question')" onMouseOut="showIT()" rows="6" cols="49" name="prev" class="input"><? echo $prev_text ?></textarea>
 									</td>
-									
-									
 									<TD  bgcolor="#D9D9A8" align="center">&nbsp;</TD>
 								</tr>
-<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-								
 								<tr height="8"><td colspan="3" bgcolor="#D9D9A8"></td></tr>
 
 									<tr>

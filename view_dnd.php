@@ -1,8 +1,4 @@
 <?php
-
-ob_start();
-
-require("config.php");
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate");
@@ -11,7 +7,6 @@ $login_form=$_REQUEST["login"];
 $sess_id=$_REQUEST["sess_id"];
 $action=$_REQUEST["action"];
 $smenu=$_REQUEST["smenu"];
-$compName=$_REQUEST["cpName"];
 
 $limit= $_REQUEST['limit'];
 $page= $_REQUEST['page'];
@@ -69,7 +64,7 @@ if($smenu==2){
 			</tr>
 
 			<?
-			$query="select file_path,group_id,subgroup_id from dnd_detail where group_id=18";
+			$query="select file_path,group_id,subgroup_id from dnd_detail";
 			$result=mysql_query($query);
 			$total_items=mysql_num_rows($result);
 
@@ -89,8 +84,8 @@ if($smenu==2){
 
 			$total_pages = ceil($total_items / $limit);
 			$set_limit = $page * $limit - ($limit);
-	
-			$query="select file_path,group_id,subgroup_id from dnd_detail where companyName='$compName' limit $set_limit, $limit ";
+
+			$query="select file_path,group_id,subgroup_id from dnd_detail limit $set_limit, $limit ";
 			$result=mysql_query($query);
 			if($total_items == 0){?>
 			<tr height="4px" bgcolor="#d9d9a8">
@@ -105,7 +100,7 @@ if($smenu==2){
 			while($i<mysql_num_rows($result)){
 				$row=mysql_fetch_array($result);
 				$path=$row[0];
-				$pos=strrpos($row[0],DIR_SEPERATOR);
+				$pos=strrpos($row[0],"/");
 				$field1=substr($row[0],$pos+1);
 				$query1="select group_name from group_detail where group_id='".$row[1]."'";
 				$result1=mysql_query($query1);

@@ -1,16 +1,12 @@
 <?php
-
-ob_start();
-
 require("upload.php");
 require("gui_common.php");
 require("template.php");
 
-$compName = $_REQUEST["companyName"];
-
 $action=$_REQUEST["action"];			//1-new,2-update,3-delete
 $treeview_cod=$_REQUEST["treeview_cod"];
 $smenu=$_REQUEST["smenu"];
+
 $login_form=$_REQUEST["login"];
 $sess_id=$_REQUEST["sess_id"];
 $cnts_id=$_REQUEST["cnts_id"];
@@ -26,8 +22,6 @@ $s_minute=$_REQUEST["s_minute"];
 $e_minute=$_REQUEST["e_minute"];
 $score=$_REQUEST["score"];
 $checkscore=($_REQUEST["checkscore"]!="")?'1':'0';
-
-
 if($checkscore){
 	$negscore=$_REQUEST["negscore"];
 }else{
@@ -45,8 +39,8 @@ if($checkbill){
 	$bill_type=$_REQUEST["bill_type"];
 }else{
 	$app_id="";
-	$price_pt="0";
-	$bill_type="0";
+	$price_pt="";
+	$bill_type="";
 }
 
 $checksmskey=($_REQUEST["checksmskey"]!="")?'1':'0';
@@ -108,14 +102,14 @@ $sqlquery_banner_header="";
 $sqlquery_banner_footer="";
 */
 
-$delpath=getcwd() .DIR_SEPERATOR."uploads".DIR_SEPERATOR . $login_form . DIR_SEPERATOR . $tmpfolder_name;
-$mvpath=getcwd() .DIR_SEPERATOR."uploads".DIR_SEPERATOR . $login_form . DIR_SEPERATOR . $cnts_name;
+$delpath=getcwd() ."/uploads/" . $login_form . "/" . $tmpfolder_name;
+$mvpath=getcwd() ."/uploads/" . $login_form . "/" . $cnts_name;
 
-$destn1= "uploads".DIR_SEPERATOR . $login_form . DIR_SEPERATOR . $cnts_name . DIR_SEPERATOR . $tag1;
-$destn2= "uploads".DIR_SEPERATOR . $login_form . DIR_SEPERATOR . $cnts_name . DIR_SEPERATOR . $tag2;
+$destn1= "uploads/" . $login_form . "/" . $cnts_name . "/" . $tag1;
+$destn2= "uploads/" . $login_form . "/" . $cnts_name . "/" . $tag2;
 
-$zippath1=getcwd() .DIR_SEPERATOR . $destn1 . DIR_SEPERATOR;
-$zippath2=getcwd() .DIR_SEPERATOR . $destn2 . DIR_SEPERATOR;
+$zippath1=getcwd() ."/" . $destn1 . "/";
+$zippath2=getcwd() ."/" . $destn2 . "/";
 
 $sqlquery_banner_header="";
 $sqlquery_banner_footer="";
@@ -136,7 +130,7 @@ if($action==3 && $cnts_id){
 	}
 
 	$msg_alert = 'Contest Successfully Deleted!';
-	header("Location: contest_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&msg_alert=" . $msg_alert ."&action=" . $action ."&treeview_cod=" . $treeview_cod ."&cnts_id=" . $cnts_id . "&smenu=" . $smenu . "&cpName=" . $compName);
+	header("Location: contest_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&msg_alert=" . $msg_alert ."&action=" . $action ."&treeview_cod=" . $treeview_cod ."&cnts_id=" . $cnts_id . "&smenu=" . $smenu);
 	die();
 }
 
@@ -145,8 +139,7 @@ if($action==1){
 }else if($action==2){
 		$urlstr="Location: contest_modify.php?";
 }
-$urlstr=$urlstr . "action=" . $action . "&treeview_cod=" . $treeview_cod . "&login=" . $login_form . "&contest_name=" . $cnts_name . "&cnts_id=" . $cnts_id . "&welcome_msg=" . $welcome_msg . "&contest_type=" . $cnts_type . "&s_date=" . $s_date . "&e_date=" . $e_date . "&s_hour=" . $s_hour . "&e_hour=" . $e_hour . "&s_minute=" . $s_minute . "&e_minute=" . $e_minute . "&score=" . $score . "&negscore=" . $negscore . "&c_score=" . $c_score . "&t_score=" . $t_score . "&w_score=" . $w_score . "&checkbill=" . $checkbill . "&app_id=" . $app_id . "&price_pt=" . $price_pt . "&bill_type=" . $bill_type . "&ques_type=" . $ques_type . "&quetsno=" . $quetsno . "&score_type=" . $score_type . "&max_option=" . $max_option . "&off_msg=" . $off_msg . "&over_msg=" . $over_msg . "&fut_msg=" . $fut_msg . "&checkscore=" . $checkscore . "&act_status=" . $act_status . "&futsep=" . $futsep . "&sess_id=" . $sess_id . "&futchk=" . $futchk . "&smenu=" . $smenu . "&checksmskey=" . $checksmskey . "&shortcode=" . $shortcode . "&keyword=" . $keyword . "&checksmsalias=" . $checksmsalias. "&cpName=" . $compName ;
-
+$urlstr=$urlstr . "action=" . $action . "&treeview_cod=" . $treeview_cod . "&login=" . $login_form . "&contest_name=" . $cnts_name . "&cnts_id=" . $cnts_id . "&welcome_msg=" . $welcome_msg . "&contest_type=" . $cnts_type . "&s_date=" . $s_date . "&e_date=" . $e_date . "&s_hour=" . $s_hour . "&e_hour=" . $e_hour . "&s_minute=" . $s_minute . "&e_minute=" . $e_minute . "&score=" . $score . "&negscore=" . $negscore . "&c_score=" . $c_score . "&t_score=" . $t_score . "&w_score=" . $w_score . "&checkbill=" . $checkbill . "&app_id=" . $app_id . "&price_pt=" . $price_pt . "&bill_type=" . $bill_type . "&ques_type=" . $ques_type . "&quetsno=" . $quetsno . "&score_type=" . $score_type . "&max_option=" . $max_option . "&off_msg=" . $off_msg . "&over_msg=" . $over_msg . "&fut_msg=" . $fut_msg . "&checkscore=" . $checkscore . "&act_status=" . $act_status . "&futsep=" . $futsep . "&sess_id=" . $sess_id . "&futchk=" . $futchk . "&smenu=" . $smenu . "&checksmskey=" . $checksmskey . "&shortcode=" . $shortcode . "&keyword=" . $keyword . "&checksmsalias=" . $checksmsalias;
 
 if(gettype($futtxt)=='array')  $temptxt=implode("|",$futtxt);
 if(gettype($futlnk)=='array')  $templnk=implode("|",$futlnk);
@@ -184,7 +177,7 @@ $temp1=explode('/',$s_date);
 $temp_dt1=mktime($s_hour,$s_minute,'00',$temp1[0],$temp1[1],$temp1[2]);
 $temp2=explode('/',$e_date);
 $temp_dt2=mktime($e_hour,$e_minute,'00',$temp2[0],$temp2[1],$temp2[2]);
-$temp_dt0=time();
+$temp_dt0=mktime();
 
 if ($action==1 && ($temp_dt1 < $temp_dt0)){
 	$msg_alert = "Please Change Start Datetime Greater Than Current Datetime!";
@@ -267,24 +260,23 @@ if($action==1 || $action==2){
 	if($_FILES[$tag1]["name"]!=""){
 
 		$zipfile1=upload_banner ($tag1,$destn1);	//return path or upload error
-		//echo "<br/>".$zippath1;
-		if(strrpos($zipfile1,DIR_SEPERATOR)===false){
+		if(strrpos($zipfile1,"/")===false){
 			$ziperror=0;
 			$msg_alert=$zipfile1;
 			header($urlstr . "&msg_alert=" . $msg_alert);
 			die();
 		}else if(unzip_bulk_file($zipfile1, $zippath1)) {
 			$banner_size=config_parser('header');
-			if(validator($zippath1,$banner_size,$sqlquery_banner_header,'header')){
+			if(validator($zippath1,$banner_size,&$sqlquery_banner_header,'header')){
 				$errflinefeed=1;
 				delete_dir($delpath);
 				$msg_alert="Nazara Quiz Header Banner size doesn’t matches with available banner sizes " . $file;
-				//header($urlstr . "&msg_alert=" . $msg_alert . "&errorlog=1");
-				//die();
+				header($urlstr . "&msg_alert=" . $msg_alert . "&errorlog=1");
+				die();
 			}
 		}
-		if($action==2 && is_dir($mvpath .DIR_SEPERATOR . $tag1)){
-			delete_dir($mvpath .DIR_SEPERATOR . $tag1);
+		if($action==2 && is_dir($mvpath .'/' . $tag1)){
+			delete_dir($mvpath .'/' . $tag1);
 		}
 
 		copy_dir($delpath, $mvpath);
@@ -294,28 +286,28 @@ if($action==1 || $action==2){
 	if($_FILES[$tag2]["name"]!=""){
 
 		$zipfile2=upload_banner ($tag2,$destn2);	//return path or upload error
-		if(strrpos($zipfile2,DIR_SEPERATOR)===false){
+		if(strrpos($zipfile2,"/")===false){
 			$ziperror=0;
 			$msg_alert=$zipfile2;
 			header($urlstr . "&msg_alert=" . $msg_alert);
 			die();
 		}else if(unzip_bulk_file($zipfile2,$zippath2)){
 			$banner_size=config_parser('footer');
-			if(validator($zippath2,$banner_size,$sqlquery_banner_footer,'footer')){
+			if(validator($zippath2,$banner_size,&$sqlquery_banner_footer,'footer')){
 				$errflinefeed=1;
 				delete_dir($delpath);
 
-				if($_FILES[$tag1]["name"]!="" && is_dir($mvpath .DIR_SEPERATOR . $tag1)){
+				if($_FILES[$tag1]["name"]!="" && is_dir($mvpath .'/' . $tag1)){
 					delete_dir($mvpath);
 				}
 				$msg_alert="ERR Nazara Quiz Footer Banner size do not matches with available banner sizes " . $file;
-				//header($urlstr . "&msg_alert=" . $msg_alert . "&errorlog=1");
-				//die();
+				header($urlstr . "&msg_alert=" . $msg_alert . "&errorlog=1");
+				die();
 			}
 		}
 
-		if($action==2 && is_dir($mvpath .DIR_SEPERATOR . $tag2)){
-			delete_dir($mvpath .DIR_SEPERATOR . $tag2);
+		if($action==2 && is_dir($mvpath .'/' . $tag2)){
+			delete_dir($mvpath .'/' . $tag2);
 		}
 
 		copy_dir($delpath, $mvpath);
@@ -325,30 +317,23 @@ if($action==1 || $action==2){
 
 /***'*** Zip File Process ***'***/
 if($action==1 && $ziperror){
-	//echo "<br>after insert".$compName;
-	//die();
 	$cnts_id = insert_contest();
 	$temp="('" . $cnts_id . "',";
 
 	$sqlquery_banner="insert into contest_banner(contest_id,label,format,width,height,path,type,login) values ";
-	
 
-	//echo "<br>Header: ".$sqlquery_banner_header=$sqlquery_banner . str_replace("(",$temp,$sqlquery_banner_header);
-	//echo "<br>Footer: ".$sqlquery_banner_footer=$sqlquery_banner . str_replace("(",$temp,$sqlquery_banner_footer);
 
-	//$result = mysql_query($sqlquery_banner_header) or die('mysql error bn_header:' . mysql_error());------------------- header banner Insert query
+	$sqlquery_banner_header=$sqlquery_banner . str_replace("(",$temp,$sqlquery_banner_header);
+	$sqlquery_banner_footer=$sqlquery_banner . str_replace("(",$temp,$sqlquery_banner_footer);
 
-	//$result = mysql_query($sqlquery_banner_footer) or die('mysql error bn_footer:' . mysql_error());------------------- footer banner Insert query
+	$result = mysql_query($sqlquery_banner_header) or die('mysql error:' . mysql_error());
+
+	$result = mysql_query($sqlquery_banner_footer) or die('mysql error:' . mysql_error());
 
 	$msg_alert = 'Contest Successfully Created!';
-	
-	header("Location: contest_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&cnts_id=" . $cnts_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu . "&cpName=" . $compName);
+	header("Location: contest_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&cnts_id=" . $cnts_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu);
 	die();
-	
 }else if($action==2 && $ziperror){
-	
-	global $compName;
-	 
 	update_contest();
 
 	$sqlquery_banner_sub="insert into contest_banner(contest_id,label,format,width,height,path,type,login) values ";
@@ -356,44 +341,36 @@ if($action==1 && $ziperror){
 
 	if($_FILES[$tag1]["name"]!=""){
 		$sqlquery="delete from contest_banner where contest_id='" . $cnts_id . "' and type='" . $tag1 . "'";
-		//$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());---------------------------------------------------- header banner delete query
+		$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 		$sqlquery_banner_header=$sqlquery_banner_sub . str_replace("(",$temp,$sqlquery_banner_header);
-		//$result = mysql_query($sqlquery_banner_header) or die('mysql error:' . mysql_error());-------------------------------------- header banner update query
+		$result = mysql_query($sqlquery_banner_header) or die('mysql error:' . mysql_error());
 	}
 
 
 	if($_FILES[$tag2]["name"]!=""){
 		$sqlquery="delete from contest_banner where contest_id='" . $cnts_id . "' and type='" . $tag2 . "'";
-		//$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());---------------------------------------------------- footer banner delete query
+		$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 		$sqlquery_banner_footer=$sqlquery_banner_sub . str_replace("(",$temp,$sqlquery_banner_footer);
-		//$result = mysql_query($sqlquery_banner_footer) or die('mysql error:' . mysql_error());-------------------------------------- footer banner update query
+		$result = mysql_query($sqlquery_banner_footer) or die('mysql error:' . mysql_error());
 	}
 
-	//echo "after update: ".$compName;
-	//die();
-	
+
 	$msg_alert = 'Contest Successfully Updated!';
-	$url= "Location: contest_modify.php?login=" . $login_form . "&sess_id=" . $sess_id ."&flag=1&cnts_id=" . $cnts_id . "&msg_alert=" . $msg_alert . "&action=2&smenu=" . $smenu . "&cpName=" . $compName;
+	$url= "Location: contest_modify.php?login=" . $login_form . "&sess_id=" . $sess_id ."&flag=1&cnts_id=" . $cnts_id . "&msg_alert=" . $msg_alert . "&action=2&smenu=" . $smenu;
  	header($url);
 	die();
 }
 
 function insert_contest(){
 
-	global $compName,$checksmskey,$shortcode,$keyword,$checksmsalias,$aliastxt,$smenu,$futsep,$futchk,$futtxt,$futlnk,$add_type,$cnts_id,$login_form,$sess_id,$cnts_name,$welcome_msg,$cnts_type,$start_date,$end_date,$score,$checkscore,$negscore,$c_score,$t_score,$w_score,$checkbill,$app_id,$bill_type,$price_pt,$ques_type,$quetsno,$score_type,$max_option,$off_msg,$over_msg,$fut_msg,$tag1,$tag2;
+	global $checksmskey,$shortcode,$keyword,$checksmsalias,$aliastxt,$smenu,$futsep,$futchk,$futtxt,$futlnk,$add_type,$cnts_id,$login_form,$sess_id,$cnts_name,$welcome_msg,$cnts_type,$start_date,$end_date,$score,$checkscore,$negscore,$c_score,$t_score,$w_score,$checkbill,$app_id,$bill_type,$price_pt,$ques_type,$quetsno,$score_type,$max_option,$off_msg,$over_msg,$fut_msg,$tag1,$tag2;
 
 	$active_status=0;	//default
-	//echo "Insert : ".$compName;
-	//die();
-	
-	 $sqlquery="insert into contest_detail(companyName,contest_name,welcome_message,contest_type,start_date,end_date,score,score_neg_status,negative_marking,cummulative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,smskey_status,key_alias_status,question_status,question_size,score_type,max_options,off_message,contest_over_message,contest_footer_message,active_status,footer_link,footer_sept,diplay_add,header_upload,footer_upload,login) values ";
-	  $values="('" . $compName . "','" . $cnts_name . "','" . str_replace("'", "''", $welcome_msg) . "','" . $cnts_type . "','" . $start_date . "','" . $end_date . "','" . $score . "','" . $checkscore . "','" . $negscore . "','" . $c_score . "','" . $t_score . "','" . $w_score . "','" . $checkbill . "','" . $app_id . "','" . $bill_type . "','" . $price_pt . "','" . $checksmskey . "','" . $checksmsalias . "','" . $ques_type . "','" . $quetsno . "','" . $score_type . "','" . $max_option . "','" . str_replace("'", "''", $off_msg) . "','" . str_replace("'", "''", $over_msg) . "','" . str_replace("'", "''", $fut_msg) . "','" . $active_status . "','" . $futchk . "','" . $futsep . "','" . $add_type . "','" . $_FILES[$tag1]['name'] . "','" . $_FILES[$tag2]['name'] . "','" . $login_form . "')";
-	
-	
+	$sqlquery="insert into contest_detail(contest_name,welcome_message,contest_type,start_date,end_date,score,score_neg_status,negative_marking,cummulative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,smskey_status,key_alias_status,question_status,question_size,score_type,max_options,off_message,contest_over_message,contest_footer_message,active_status,footer_link,footer_sept,diplay_add,header_upload,footer_upload,login) values ";
+	$values="('" . $cnts_name . "','" . str_replace("'", "''", $welcome_msg) . "','" . $cnts_type . "','" . $start_date . "','" . $end_date . "','" . $score . "','" . $checkscore . "','" . $negscore . "','" . $c_score . "','" . $t_score . "','" . $w_score . "','" . $checkbill . "','" . $app_id . "','" . $bill_type . "','" . $price_pt . "','" . $checksmskey . "','" . $checksmsalias . "','" . $ques_type . "','" . $quetsno . "','" . $score_type . "','" . $max_option . "','" . str_replace("'", "''", $off_msg) . "','" . str_replace("'", "''", $over_msg) . "','" . str_replace("'", "''", $fut_msg) . "','" . $active_status . "','" . $futchk . "','" . $futsep . "','" . $add_type . "','" . $_FILES[$tag1]['name'] . "','" . $_FILES[$tag2]['name'] . "','" . $login_form . "')";
 	$sqlquery=$sqlquery . $values;
-	
-	$result = mysql_query($sqlquery) or die('mysql error insert contest:' . mysql_error());
-	
+
+	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	$cnts_id = mysql_insert_id();
 
 	if($futchk && $cnts_id){
@@ -408,7 +385,7 @@ function insert_contest(){
 			}
 		}
 		$sqlquery=$sqlquery . $values;
-		$result = mysql_query($sqlquery) or die('mysql error futchk:' . mysql_error());
+		$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	}
 
 
@@ -432,31 +409,31 @@ function insert_contest(){
 
 		if($checksmsalias && $tempsql){
 			$sqlquery = $sqlquery . $tempsql;
-			$result = mysql_query($sqlquery) or die('mysql error keyword:' . mysql_error());
+			$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 		}
 	}
 
 	if ($result == 0){
 		$msg_alert = "There is some problem at server";
-		user_session($login_form,$sess_id,$msg_alert,$compName);
-		header("Location: contest_engine.php?login=" . $login_form . "&sess_id=" . $sess_id ."&cnts_id=" . $cnts_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu . "&cpName=" . $compName);
+		user_session($login_form,$sess_id,$msg_alert);
+		header("Location: contest_engine.php?login=" . $login_form . "&sess_id=" . $sess_id ."&cnts_id=" . $cnts_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu);
 		die();
 	}else{
 		$login_history = $cnts_name . " Contest successfully Created!";
-		user_session($login_form,$sess_id,$login_history,$compName);
+		user_session($login_form,$sess_id,$login_history);
 	}
 	return $cnts_id;
 }
 
 function update_contest(){
 
-	global  $checksmskey,$shortcode,$keyword,$checksmsalias,$aliastxt,$futsep,$futchk,$futtxt,$futlnk,$add_type,$act_status,$cnts_id,$login_form,$sess_id,$cnts_name,$welcome_msg,$cnts_type,$start_date,$end_date,$score,$checkscore,$negscore,$c_score,$t_score,$w_score,$checkbill,$app_id,$bill_type,$price_pt,$ques_type,$quetsno,$score_type,$max_option,$off_msg,$over_msg,$fut_msg,$tag1,$tag2,$compName;
+	global $checksmskey,$shortcode,$keyword,$checksmsalias,$aliastxt,$futsep,$futchk,$futtxt,$futlnk,$add_type,$act_status,$cnts_id,$login_form,$sess_id,$cnts_name,$welcome_msg,$cnts_type,$start_date,$end_date,$score,$checkscore,$negscore,$c_score,$t_score,$w_score,$checkbill,$app_id,$bill_type,$price_pt,$ques_type,$quetsno,$score_type,$max_option,$off_msg,$over_msg,$fut_msg,$tag1,$tag2;
 
 	if($_FILES[$tag1]["name"]!="" && $_FILES[$tag2]["name"]!=""){ $temp=",header_upload='" . $_FILES[$tag1]["name"] . "',footer_upload='" . $_FILES[$tag2]["name"] . "'";}
 	else if($_FILES[$tag1]["name"]!="" && $_FILES[$tag2]["name"]=="" ){ $temp=",header_upload='" . $_FILES[$tag1]["name"] . "'";}
 	else if($_FILES[$tag2]["name"]!="" && $_FILES[$tag1]["name"]=="" ){ $temp=",footer_upload='" . $_FILES[$tag2]["name"] . "'";}
 
- 	$sqlquery="update contest_detail set welcome_message='" . str_replace("'", "''", $welcome_msg) . "',contest_type='" . $cnts_type . "',start_date='" . $start_date . "',end_date='" . $end_date . "',score='" . $score . "',score_neg_status='" . $checkscore . "',negative_marking='" . $negscore . "',cummulative_score='" . $c_score . "',today_score='" . $t_score . "',weekly_score='" . $w_score . "',bill_status='" . $checkbill . "',application_id='" . $app_id . "',price_status='" . $bill_type . "',price_pt='" . $price_pt . "',smskey_status='" . $checksmskey . "',key_alias_status='" . $checksmsalias . "',question_status='" . $ques_type . "',question_size='" . $quetsno . "',score_type='" . $score_type . "',max_options='" . $max_option . "',off_message='" . str_replace("'", "''", $off_msg) . "',footer_link='" . $futchk . "',footer_sept='" . $futsep . "',diplay_add='" . $add_type . "',contest_over_message='" . str_replace("'", "''", $over_msg) . "',contest_footer_message='" . str_replace("'", "''", $fut_msg) . "',active_status='" . $act_status . "'" . $temp . " where contest_name='" . $cnts_name . "' and contest_id='" . $cnts_id . "' and companyName='" . $compName . "'";
+ 	$sqlquery="update contest_detail set welcome_message='" . str_replace("'", "''", $welcome_msg) . "',contest_type='" . $cnts_type . "',start_date='" . $start_date . "',end_date='" . $end_date . "',score='" . $score . "',score_neg_status='" . $checkscore . "',negative_marking='" . $negscore . "',cummulative_score='" . $c_score . "',today_score='" . $t_score . "',weekly_score='" . $w_score . "',bill_status='" . $checkbill . "',application_id='" . $app_id . "',price_status='" . $bill_type . "',price_pt='" . $price_pt . "',smskey_status='" . $checksmskey . "',key_alias_status='" . $checksmsalias . "',question_status='" . $ques_type . "',question_size='" . $quetsno . "',score_type='" . $score_type . "',max_options='" . $max_option . "',off_message='" . str_replace("'", "''", $off_msg) . "',footer_link='" . $futchk . "',footer_sept='" . $futsep . "',diplay_add='" . $add_type . "',contest_over_message='" . str_replace("'", "''", $over_msg) . "',contest_footer_message='" . str_replace("'", "''", $fut_msg) . "',active_status='" . $act_status . "'" . $temp . " where contest_name='" . $cnts_name . "' and contest_id='" . $cnts_id . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	$sqlquery="select id from keyword where type='1' and type_id='" . $cnts_id . "' and login='" . $login_form . "'";
@@ -510,13 +487,13 @@ function update_contest(){
 	}
 
 	$login_history = $cnts_name . " Contest successfully Updated!";
-	user_session($login_form,$sess_id,$login_history,$compName);
+	user_session($login_form,$sess_id,$login_history);
 }
 
 function delete_contest (){
-	global $login_form, $cnts_id, $sess_id,$compName;
+	global $login_form, $cnts_id, $sess_id;
 
-	$sqlquery = "delete from contest_detail where contest_id='" . $cnts_id . "' and companyName='" . $compName. "'";
+	$sqlquery = "delete from contest_detail where contest_id='" . $cnts_id . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	$sqlquery="select id from keyword where type='1' and type_id='" . $cnts_id . "' and login='" . $login_form . "'";
@@ -532,7 +509,7 @@ function delete_contest (){
 	$sqlquery="delete from keyword_detail where  keyword_id='" . $keyword_id . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
-	$sqlquery = "delete from contest_questions where contest_id='" . $cnts_id . "' and companyName='" . $compName. "'";
+	$sqlquery = "delete from contest_questions where contest_id='" . $cnts_id . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 
@@ -543,13 +520,13 @@ function delete_contest (){
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	$login_history = $cnts_name . " Contest successfully Deleted!";
-	user_session($login_form,$sess_id,$login_history,$compName);
+	user_session($login_form,$sess_id,$login_history);
 }
 
 function contest_available ($cnts_name){
-	global $login_form,$compName;
+	global $login_form;
 
-	$sqlquery = "select * from contest_detail where contest_name='" . $cnts_name . "' and companyName='" . $compName . "' limit 1";
+	$sqlquery = "select * from contest_detail where contest_name='" . $cnts_name . "' limit 1";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	$cnts_avail=0;
 	while($row=mysql_fetch_row($result)){

@@ -1,5 +1,4 @@
 <?php require("connection_mmc.php"); //adding connection file
-require("config.php");
 set_time_limit(0);
 /*********HEADER OF PG*********/
 
@@ -133,9 +132,8 @@ function voting_qestion_detail ($cnts_id){
 
 function user_session($lg,$sess_id,$msg){
 	global $conn;
-
 	if(strlen($lg)<1){
-		$msg_alert = "!!!!!!!!!!!!!!!Login Here Again!!!!!!!!!!!!!!!!!!!!!!";
+		$msg_alert = "Login Here Again!!!";
 		header("Location: index.php?msg_alert=" . $msg_alert ."");
 		die();
 	}else{
@@ -149,7 +147,7 @@ function user_session($lg,$sess_id,$msg){
 		$new_date = date("Y-m-d H:i:s",mktime($hor-1,$min-$duration_min,$ss,$mon,$da,$yr));
 
 		if($msg=="newuser"){
-			$msg = "-----------------Login Success!!!";
+			$msg = "Login Success!!!";
 			$sqlquery = "select id from access_detail where login = '" . $lg . "'";
 		}else{
 			$sqlquery="select id from mmc_session where timestamp>'" . $new_date ."' and timestamp < now() and sess_id='" . $sess_id . "' and login_created='" . $lg . "' order by id desc limit 1";
@@ -167,7 +165,7 @@ function user_session($lg,$sess_id,$msg){
 			//			echo $sqlquery;
 			$msg = "";
 		}else{
-			$msg_alert = "!!!!!!!--------------------Login Here Again!!!";
+			$msg_alert = "Login Here Again!!!";
 			header("Location: index.php?msg_alert=" . $msg_alert ."");
 			die();
 		}
@@ -180,7 +178,7 @@ function check_login(){
 	$password_form = $_REQUEST["password"];
 
 	if(strlen($login_form)<1 || strlen($password_form)<1){
-		$msg_alert = "-----------------Either login or password is not correct!!!--------------------";
+		$msg_alert = "Either login or password is not correct!!!";
 		header("Location: index.php?msg_alert=" . $msg_alert ."");
 	}else{
 		$sqlquery = "select login from access_detail where login = '" . $login_form . "' and password = '" . $password_form . "'";
@@ -194,7 +192,7 @@ function check_login(){
 		if($test == 1){
 			header("Location: plain.php?login=" . $login_form . "");
 		}else{
-			$msg_alert = "================Enther login or password is not correct!!!====================";
+			$msg_alert = "Enther login or password is not correct!!!";
 			header("Location: index.php?msg_alert=" . $msg_alert ."");
 		}
 	}
@@ -236,7 +234,7 @@ function getfolder($grp_id,$sgrp_id){
 
 	$temp="";
 	while($row = mysql_fetch_row($result)){
-		$temp=$row[0] . DIR_SEPERATOR . $row[1];
+		$temp=$row[0] . "/" . $row[1];
 	}
 	return $temp;
 }

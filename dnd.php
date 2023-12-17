@@ -1,10 +1,6 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
-
 ?>
 <script laguage="javascript">
 function getCheck(){
@@ -20,10 +16,9 @@ $login_form = $_REQUEST["login"];
 $msg_alert = $_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-$compName=$_REQUEST["cpName"];
+
 $grp_name = $_REQUEST["grp_name"];
 $grp_desc = $_REQUEST["grp_desc"];
-
 if($_REQUEST["display"]==1)
 {
 	$path=$_REQUEST["path"];
@@ -36,7 +31,7 @@ if($_REQUEST["display"]==1)
 
 $arrgroup=array();
 
-$sqlquery="select grp.group_id,grp.group_name,sgrp.subgroup_id,sgrp.subgroup_name from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.active_status=sgrp.active_status and grp.active_status=1 and  grp.companyName='" . $compName. "' order by grp.group_id";
+$sqlquery="select grp.group_id,grp.group_name,sgrp.subgroup_id,sgrp.subgroup_name from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.active_status=sgrp.active_status and grp.active_status=1 and grp.login='" . $login_form . "' order by grp.group_id";
 $result = mysql_query($sqlquery,$conn) or die('mysql error:' . mysql_error());
 
 $cnt=0;$cnt1=0;
@@ -85,7 +80,7 @@ if($msg_alert==""){
 	$msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -132,8 +127,8 @@ if(!$arrgroup[0]['id']){
 	}
 </script>
 
-<form name="dnd_create" id="dnd_create" action="dnd_update.php" enctype="multipart/form-data" method="post">
-
+<form name="dnd_create" id="dnd_create" action="dnd_update.php"
+	enctype="multipart/form-data" method="post">
 <table align="left" border="1" cellspacing="1" cellpadding="0"
 	width="748px" bgcolor="#525200">
 	<tr>
@@ -218,11 +213,7 @@ if(!$arrgroup[0]['id']){
 					<tr height="8">
 						<td colspan="3" bgcolor="#D9D9A8"></td>
 					</tr>
-   <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-                            
+
 					<tr height="16" bgcolor="#D9D9A8">
 						<td align="center" class="WorkGreen" colspan="3"><input
 							type="button" onclick="dnd_submit('dnd_create')" class="submit1"
@@ -238,7 +229,7 @@ if(!$arrgroup[0]['id']){
 					print "<input type=\"hidden\" name=\"sess_id\" value=" . $sess_id . ">";
 					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
 					print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
-					print "<input type=\"hidden\" name=\"cpName\" value ='".$compName."'>";
+
 					?>
 
 				</table>

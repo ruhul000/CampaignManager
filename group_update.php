@@ -1,6 +1,4 @@
 <?php
-
-ob_start();
 require("gui_common.php");
 
 $login_form = $_REQUEST["login"];
@@ -14,39 +12,27 @@ $sgrp_name = $_REQUEST["sgrp_name"];
 $sgrp_desc = $_REQUEST["sgrp_desc"];
 $grp_id = $_REQUEST["grp_id"];
 $sgrp_id = $_REQUEST["sgrp_id"];
+
 $active_status=$_REQUEST["active_status"];
-echo "Company : ".$compName = $_REQUEST["cpName"];
 
-
-$url = "login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_name=" . $grp_name ."&grp_desc=" . $grp_desc ."&grp_id=" . $grp_id . "&sgrp_name=" . $sgrp_name ."&sgrp_desc=" . $sgrp_desc ."&sgrp_id=" ."&cpName=" . $compName;
-
-if ($action == 1)
-{
+$url = "login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_name=" . $grp_name ."&grp_desc=" . $grp_desc ."&grp_id=" . $grp_id . "&sgrp_name=" . $sgrp_name ."&sgrp_desc=" . $sgrp_desc ."&sgrp_id=" . $sgrp_id;
+if ($action == 1){
     $active_status=1;
     $strurl = "Location: group_create.php?" . $url;
-}
-elseif ($action == 2)
-{
+}elseif ($action == 2){
     $strurl = "Location: group_modify.php?" . $url;
-}
-elseif ($action == 3)
-{
+}elseif ($action == 3){
     $group_exist = check_schedular ($grp_id);
-    if ($group_exist == 0)
-    {
+    if ($group_exist == 0){
     	delete_group ();
-    }
-    elseif ($group_exist == 2)
-    {
+    }elseif ($group_exist == 2){
 		$msg_alert = "$grp_name Group exist in Target.You cannot delete it!";
-		$strurl = "Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id. "&cpName=" . $compName;
+		$strurl = "Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id;
 		header($strurl . "&msg_alert=" . $msg_alert);
 		die();
-    }
-    else
-    {
+    }else{
 		$msg_alert = "$grp_name Group exist in Schedular.You cannot delete it!";
-		$strurl = "Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id. "&cpName=" . $compName;
+		$strurl = "Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id;
 		header($strurl . "&msg_alert=" . $msg_alert);
 		die();
     }
@@ -54,69 +40,60 @@ elseif ($action == 3)
     $grp_id = next_groupid();
 
     $msg_alert = "$grp_name Group Successfully Deleted";
-    $strurl = "Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id. "&cpName=" . $compName;
+    $strurl = "Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id;
     header($strurl . "&msg_alert=" . $msg_alert);
     die();
 }
 
-if (!$grp_name)
-{
+if (!$grp_name){
     $msg_alert = "Please Enter Group Name!";
-    header($strurl . "&msg_alert=" . $msg_alert. "&cpName=" . $compName);
+    header($strurl . "&msg_alert=" . $msg_alert);
     die();
-}
-else if ($action==1 && check_group_availability ($grp_name)) 
-{
+}else if ($action==1 && check_group_availability ($grp_name)) {
     $msg_alert = "Group With This Name Already Exist, Choose Another Name!";
-    header($strurl . "&msg_alert=" . $msg_alert. "&cpName=" . $compName);
+    header($strurl . "&msg_alert=" . $msg_alert);
     die();
 }
 
-if (!$grp_desc)
-{
+if (!$grp_desc){
     $msg_alert = "Please Enter Group Description!";
-    header($strurl . "&msg_alert=" . $msg_alert. "&cpName=" . $compName);
+    header($strurl . "&msg_alert=" . $msg_alert);
     die();
 }
 
-if ($action == 1)
-{
+if ($action == 1){
     $grp_id = insert_group ();
     $msg_alert = "$grp_name Group Successfully Created!";
-    header("Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id . "&msg_alert=" . $msg_alert. "&cpName=" . $compName);
+    header("Location: group_view.php?login=" . $login_form ."&smenu=" . $smenu ."&sess_id=" . $sess_id . "&grp_id=" . $grp_id . "&msg_alert=" . $msg_alert);
     die();
-}
-else if ($action == 2)
-{
+}else if ($action == 2){
     modify_group ();
     $msg_alert = "Group Successfully Updated!";
-    header($strurl . "&msg_alert=" . $msg_alert. "&cpName=" . $compName);
+    header($strurl . "&msg_alert=" . $msg_alert);
     die();
 }
 
 function insert_group ()
 {
-    global $strurl,$login_form,$sess_id,$grp_name,$grp_desc,$active_status,$compName;
-	//echo $compName;
-	
+    global $strurl,$login_form,$sess_id,$grp_name,$grp_desc,$active_status;
+
     $grp_desc = str_replace("'","''",$grp_desc);
 
     $grp_name = strtolower($grp_name);
-    $sqlquery = "insert into group_detail(login, group_name, description, active_status,companyName) values ('" . $login_form . "', '" . $grp_name . "', '" . $grp_desc . "', '" . $active_status . "', '" . $compName . "')";
-    echo "Hello : ".$sqlquery;
-    //die();
+    $sqlquery = "insert into group_detail(login, group_name, description, active_status) values('" . $login_form . "', '" . $grp_name . "', '" . $grp_desc . "', '" . $active_status . "')";
+    //echo $sqlquery;
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
     return mysql_insert_id();
 }
 
 function modify_group ()
 {
-    global $strurl,$login_form,$sess_id,$grp_name,$grp_desc,$active_status,$compName;
+    global $strurl,$login_form,$sess_id,$grp_name,$grp_desc,$active_status;
 
     $grp_desc = str_replace("'","''",$grp_desc);
     $grp_name = strtolower($grp_name);
 
-    $sqlquery = "update group_detail set description='" . $grp_desc. "', active_status='" . $active_status . "' where group_name='" . $grp_name . "' and companyName='" . $compName. "'";
+    $sqlquery = "update group_detail set description='" . $grp_desc. "', active_status='" . $active_status . "' where group_name='" . $grp_name . "' and login='" . $login_form . "'";
    // echo $sqlquery;
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
@@ -127,18 +104,18 @@ function delete_group ()
 {
     global $login_form,$group_desc,$grp_id,$action,$sess_id,$active_status;
 
-    $sqlquery = "delete from group_detail where group_id='" . $grp_id . "'";
+    $sqlquery = "delete from group_detail where group_id='" . $grp_id . "' and login='" . $login_form . "'";
        $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
-    $sqlquery = "delete from subgroup_detail where group_id='" . $grp_id . "'";
+    $sqlquery = "delete from subgroup_detail where group_id='" . $grp_id . "' and login='" . $login_form . "'";
        $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 }
 
 function check_group_availability($group_name)
 {
-    global $login_form, $compName;
+    global $login_form;
 
-    $sqlquery = "select * from group_detail where group_name='" . $group_name . "' and companyName='" . $compName . "'limit 1";
+    $sqlquery = "select * from group_detail where group_name='" . $group_name . "' limit 1";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
     $grp_avail = 0;

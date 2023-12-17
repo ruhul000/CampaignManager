@@ -19,7 +19,7 @@ $db_name=$_REQUEST["db_name"];
 $db_user=$_REQUEST["db_user"];
 $db_pwd=$_REQUEST["db_pwd"];
 $login=$_REQUEST["login"];
-$filename=getcwd() .DIR_SEPERATOR. "connection".DIR_SEPERATOR."$login".DIR_SEPERATOR. "connection.php";
+$filename=getcwd() . "/connection/$login/" . "connection.php";
 
 $conn_mysql = mysql_connect("$host_ip","$db_user","$db_pwd");
 
@@ -51,7 +51,7 @@ $filetext = $filetext . '?>';
 
 
 
-$path=DIR_SEPERATOR."connection".DIR_SEPERATOR."$login".DIR_SEPERATOR;
+$path="/connection/$login/";
 if(!is_dir($path)){
 	create_folder($path);
 }

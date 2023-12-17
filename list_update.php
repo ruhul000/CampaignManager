@@ -1,9 +1,5 @@
 <?php
-ob_start();
 require("gui_common.php");
-
-
-echo "=-=-=: ".$compName = $_REQUEST["cpName"];
 
 $login_form = $_REQUEST["login"];
 $msg_alert = $_REQUEST["msg_alert"];
@@ -65,7 +61,7 @@ if(strlen($e_minute)==1){
 }
 
 
-//$url="login=" . $login_form . "&sess_id=" . $sess_id ."&smenu=" . $smenu ."&treeview_cod=" . $treeview_cod ."&schlr_name=" . $schlr_name ."&target_id=" . $target_id ."&s_date=" . $s_date ."&e_date=" . $e_date ."&s_hour=" . $s_hour ."&s_minute=" . $s_minute ."&e_hour=" . $e_hour ."&e_minute=" . $e_minute ."&rule_id=" . $rule_id ."&msgln=" . $msgln ."&list_id=" . $list_id ."&sms_type=" . $sms_type ."&sender_id=" . $sender_id."&cpName=" . $compName ;
+$url="login=" . $login_form . "&sess_id=" . $sess_id ."&smenu=" . $smenu ."&treeview_cod=" . $treeview_cod ."&schlr_name=" . $schlr_name ."&target_id=" . $target_id ."&s_date=" . $s_date ."&e_date=" . $e_date ."&s_hour=" . $s_hour ."&s_minute=" . $s_minute ."&e_hour=" . $e_hour ."&e_minute=" . $e_minute ."&rule_id=" . $rule_id ."&msgln=" . $msgln ."&list_id=" . $list_id ."&sms_type=" . $sms_type ."&sender_id=" . $sender_id;
 
 if ($action=="3" && $list_id){
 	$valid_delete = delete_list ($list_id);
@@ -78,14 +74,14 @@ if ($action=="3" && $list_id){
 		$msg_alert = "$schlr_name Scheduler End Date or Status Are Not Valid for Deletion";
 	}
 
-	header("Location: list_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $next_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu . "&cpName=" .$compName );
+	header("Location: list_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $next_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu);
 	die();
 }
 
 if($action==1){
-	$urlstr="Location: list_create.php?"." login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $next_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu . "&cpName=" .$compName ;
+	$urlstr="Location: list_create.php?" . $url;
 }else if($action==2){
-	$urlstr="Location: list_modify.php?" . " login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $next_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu . "&cpName=" .$compName ;
+	$urlstr="Location: list_modify.php?" . $url;
 }
 
 if(!$schlr_name){
@@ -120,7 +116,7 @@ $temp1=explode('/',$s_date);
 $temp_dt1=mktime($s_hour,$s_minute,'00',$temp1[0],$temp1[1],$temp1[2]);
 $temp2=explode('/',$e_date);
 $temp_dt2=mktime($e_hour,$e_minute,'00',$temp2[0],$temp2[1],$temp2[2]);
-$temp_dt0=time();
+$temp_dt0=mktime();
 
 if(!$rule_id){
 	$msg_alert = "Please Select SMS Message";
@@ -145,16 +141,16 @@ if ($action==1) {
 	getSmsDetail($rule_id);
 	$list_id = insert_list_detail ();
 	$msg_alert = "$schlr_name Scheduler Successfully Created";
-	header("Location: list_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $list_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu. "&cpName=" . $compName);
+	header("Location: list_view.php?login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $list_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu);
 	die();
 }else if ($action==2) {
 	getBaseDetail($target_id);
 	getSmsDetail($rule_id);
 	update_list_detail ($list_id);
-	//$url="login=" . $login_form . "&sess_id=" . $sess_id ."&smenu=" . $smenu ."&treeview_cod=" . $treeview_cod ."&schlr_name=" . $schlr_name ."&target_id=" . $target_id ."&s_date=" . $s_date ."&e_date=" . $e_date ."&s_hour=" . $s_hour ."&s_minute=" . $s_minute ."&e_hour=" . $e_hour ."&e_minute=" . $e_minute ."&rule_id=" . $rule_id ."&msgln=" . $msgln ."&list_id=" . $list_id;
+	$url="login=" . $login_form . "&sess_id=" . $sess_id ."&smenu=" . $smenu ."&treeview_cod=" . $treeview_cod ."&schlr_name=" . $schlr_name ."&target_id=" . $target_id ."&s_date=" . $s_date ."&e_date=" . $e_date ."&s_hour=" . $s_hour ."&s_minute=" . $s_minute ."&e_hour=" . $e_hour ."&e_minute=" . $e_minute ."&rule_id=" . $rule_id ."&msgln=" . $msgln ."&list_id=" . $list_id;
 	//echo $urlstr;
 	$msg_alert = "$schlr_name Scheduler Successfully Updated";
-	$urlstr="Location: list_modify.php?" . "login=" . $login_form . "&sess_id=" . $sess_id ."&list_id=" . $list_id . "&msg_alert=" . $msg_alert . "&smenu=" . $smenu. "&cpName=" . $compName;
+	$urlstr="Location: list_modify.php?" . $url;
 	header($urlstr . "&msg_alert=" . $msg_alert);
 	die();
 }
@@ -162,11 +158,10 @@ if ($action==1) {
 
 function insert_list_detail ()
 {
-	global $message,$footer_url,$sms_mode,$target_path,$dnd_id,$dnd_path,$sms_type,$login_form, $schlr_name, $target_id, $start_date, $end_date, $rule_id, $msgln, $s_hour, $s_minute, $e_hour, $e_minute, $daily_new_target, $sender_id,$compName;
+	global $message,$footer_url,$sms_mode,$target_path,$dnd_id,$dnd_path,$sms_type,$login_form, $schlr_name, $target_id, $start_date, $end_date, $rule_id, $msgln, $s_hour, $s_minute, $e_hour, $e_minute, $daily_new_target, $sender_id;
 
 	global $e_hour, $e_minute, $s_hour, $s_minute;
-	//echo "=-=-=: ".$compName;
-	
+
 	$active_status=1;
 
 	$schlr_name = strtolower($schlr_name);
@@ -176,7 +171,7 @@ function insert_list_detail ()
 
 
 
-	$sqlquery = "insert into list_detail (date_created,login_created,scheduler_name,target_id,target_path,dnd_id,dnd_path,sms_id,message,footer_url,sms_mode,no_of_sms,start_date,start_time,end_date,end_time,active_status,rule_id,status,sms_type,daily_new_target,sender_id,companyName) values (now(),'" . $login_form . "','" . $schlr_name . "','" . $target_id . "','" . $target_path . "','" . $dnd_id . "','" . $dnd_path . "','" . $rule_id . "','" . $message . "','" . $footer_url . "','" . $sms_mode . "','" . $msgln . "','" . $start_date . "','" . $s_time . "','" . $end_date . "','" . $e_time . "','" . $active_status . "','" . $rule_id . "','" . $active_status . "','" . $sms_type ."','". $daily_new_target ."','". $sender_id ."','". $compName."')";
+	$sqlquery = "insert into list_detail (date_created,login_created,scheduler_name,target_id,target_path,dnd_id,dnd_path,sms_id,message,footer_url,sms_mode,no_of_sms,start_date,start_time,end_date,end_time,active_status,rule_id,status,sms_type,daily_new_target,sender_id) values (now(),'" . $login_form . "','" . $schlr_name . "','" . $target_id . "','" . $target_path . "','" . $dnd_id . "','" . $dnd_path . "','" . $rule_id . "','" . $message . "','" . $footer_url . "','" . $sms_mode . "','" . $msgln . "','" . $start_date . "','" . $s_time . "','" . $end_date . "','" . $e_time . "','" . $active_status . "','" . $rule_id . "','" . $active_status . "','" . $sms_type ."','". $daily_new_target ."','". $sender_id ."')";
 	//echo "Sqlquery = " . $sqlquery;
 
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
@@ -189,7 +184,7 @@ function update_list_detail ($list_id)
 {
 	global $sms_type,$login_form, $schlr_name, $target_id, $start_date, $end_date, $rule_id, $msgln,$active_status,$daily_new_target, $sender_id;
 
-	global $e_hour, $e_minute, $s_hour, $s_minute, $message,$footer_url,$sms_mode,$target_path,$dnd_id,$dnd_path,$compName;
+	global $e_hour, $e_minute, $s_hour, $s_minute, $message,$footer_url,$sms_mode,$target_path,$dnd_id,$dnd_path;
 
 
 	$s_time = $s_hour . ":" . $s_minute;
@@ -198,8 +193,7 @@ function update_list_detail ($list_id)
 
 	$schlr_name = strtolower($schlr_name);
 	//$sqlquery = "update list_detail set target_id='" . $target_id . "',start_date='" . $start_date . "',end_date='" . $end_date . "',sms_id='" . $rule_id . "',no_of_sms='" . $msgln . "',active_status='" . $active_status . "', start_time='" . $s_time . "', sms_type='" . $sms_type . "',rule_id='" . $rule_id . "',status='" . $active_status . "', end_time='" . $e_time . "', send_status='0',daily_new_target='".$daily_new_target."' where id='" .$list_id . "' and login_created='" . $login_form . "'";
-	
-	$sqlquery = "update list_detail set target_id='" . $target_id . "',start_date='" . $start_date . "',end_date='" . $end_date . "',sms_id='" . $rule_id. "',no_of_sms='" . $msgln . "',active_status='" . $active_status . "', start_time='" . $s_time . "', sms_type='" . $sms_type . "',rule_id='" . $rule_id . "',status='" . $active_status . "', end_time='" . $e_time . "', send_status='0',daily_new_target='".$daily_new_target."',message='".str_ireplace("'","''",$message)."', footer_url='". str_ireplace("'","''",$footer_url)."',sms_mode='" . $sms_mode . "',target_id='".$target_id."', target_path='".$target_path."', dnd_id='".$dnd_id."', dnd_path='".$dnd_path."', sender_id='" . $sender_id . "' where id='" .$list_id . "' and companyName='" . $compName . "'";
+	$sqlquery = "update list_detail set target_id='" . $target_id . "',start_date='" . $start_date . "',end_date='" . $end_date . "',sms_id='" . $rule_id. "',no_of_sms='" . $msgln . "',active_status='" . $active_status . "', start_time='" . $s_time . "', sms_type='" . $sms_type . "',rule_id='" . $rule_id . "',status='" . $active_status . "', end_time='" . $e_time . "', send_status='0',daily_new_target='".$daily_new_target."',message='".str_ireplace("'","''",$message)."', footer_url='". str_ireplace("'","''",$footer_url)."',sms_mode='" . $sms_mode . "',target_id='".$target_id."', target_path='".$target_path."', dnd_id='".$dnd_id."', dnd_path='".$dnd_path."', sender_id='" . $sender_id . "' where id='" .$list_id . "' and login_created='" . $login_form . "'";
 	//echo $sqlquery;
 	//echo $sqlquery;
 
@@ -209,16 +203,16 @@ function update_list_detail ($list_id)
 
 function delete_list ($list_id)
 {
-	global $login_form,$compName;
-	//echo "<br> Delete: ".$compName . " ID: ".$list_id ."<br>";
+	global $login_form;
 
-	$sqlquery = "SELECT id FROM list_detail WHERE id=" . $list_id . " AND companyName='" . $compName . "' AND DATE(end_date)<NOW()";
+	$sqlquery = "select id from list_detail where date(end_date)<now() and  id='" . $list_id . "' and login_created='" . $login_form . "'";
 	//echo "sqlquery = " . $sqlquery . "<br>";
+
 
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 
-	
+
 	$valid_delete = 0;
 	while($row = mysql_fetch_row($result)){
 		$valid_delete=$row[0];
@@ -229,7 +223,7 @@ function delete_list ($list_id)
 
 	if($valid_delete){
 
-		$sqlquery = "delete from list_detail where id='" . $list_id . "' and companyName='" . $compName . "'";
+		$sqlquery = "delete from list_detail where id='" . $list_id . "' and login_created='" . $login_form . "'";
 		$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 		return 1;
 	}else{

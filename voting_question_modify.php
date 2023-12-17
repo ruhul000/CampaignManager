@@ -1,13 +1,8 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 
-
-echo "<br>Voting Q Mod: ".$compName = $_REQUEST["cpName"];
 $treeview_cod = $_REQUEST["treeview_cod"];
 $login_form = $_REQUEST["login"];
 $sess_id=$_REQUEST["sess_id"];
@@ -25,7 +20,7 @@ if($msg_alert=="" || stripos($msg_alert,"Voting Question Successfully Updated!!!
 	$msg=$msg_alert;
 }
 
-$sqlquery = "select voting_name, max_options,welcome_message,score_type,voting_footer_message from voting_detail where voting_id='" . $cntsid . "' and companyName='" . $compName. "'";
+$sqlquery = "select voting_name, max_options,welcome_message,score_type,voting_footer_message from voting_detail where voting_id='" . $cntsid . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row = mysql_fetch_row($result)){
 	$cnts_name = $row[0];
@@ -36,7 +31,7 @@ while($row = mysql_fetch_row($result)){
 }
 
 if($flag){
-	$sqlquery = "select voting_id, ques_no, question, a, b, c, d, active_status, max_options from voting_questions where id='" . $qutn_id . "' and voting_id='" . $cntsid . "' and companyName='" . $compName. "'";
+	$sqlquery = "select voting_id, ques_no, question, a, b, c, d, active_status, max_options from voting_questions where id='" . $qutn_id . "' and voting_id='" . $cntsid . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	while($row = mysql_fetch_row($result)){
 		$ques_no = $row[1];
@@ -233,10 +228,7 @@ function PrevQuestion(f_val,f_name) {
 								<TD  bgcolor="#D9D9A8" align="center">&nbsp;</TD>
 							</tr>
 							<tr height="8"><td colspan="3" bgcolor="#D9D9A8"></td></tr>
-   <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
+
 							<tr>
 								<td bgcolor="#D9D9A8" align="right" colspan="2"><input type="button" onclick="question_submit('question_modify','<? echo $max_option; ?>')" class="submit1" value="Modify Here!!!" style="background-image:url('images/menu1.gif');"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 								<TD bgcolor="#D9D9A8" align="center">&nbsp;</TD>
@@ -251,7 +243,6 @@ function PrevQuestion(f_val,f_name) {
 							print "<input type =hidden name=action value=\"2\">";
 							print "<input type =hidden name=treeview_cod value =$treeview_cod>";
 							print "<input type =hidden name=smenu value=$smenu>";
-							print "<input type =hidden name=cpName value= '".$compName."'>";
 
 ?>
 								</table>

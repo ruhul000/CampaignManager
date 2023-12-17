@@ -1,8 +1,8 @@
-<?php
-$location = "197.156.64.6";
+<?
+$location = "172.16.16.6";
 $database = "campaign";
-$username = "sms";
-$password = "s@m#s123";
+$username = "pramod";
+$password = "pramod";
 
 $conn = mysql_connect("$location","$username","$password");
 if (!$conn) die ("Could not connect MySQL");

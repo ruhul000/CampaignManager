@@ -1,13 +1,8 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate");
 
-
-echo "<br>Voting V: ".$compName = $_REQUEST["cpName"];
 $login_form = $_REQUEST["login"];
 $sess_id=$_REQUEST["sess_id"];
 $cnts_id = $_REQUEST["cnts_id"];
@@ -16,7 +11,7 @@ $msg_alert = $_REQUEST["msg_alert"];
 $cntsname = $_REQUEST["cnts_name"];
 $smenu=$_REQUEST["smenu"];
 
-$sqlquery = "select voting_name,welcome_message,voting_type,start_date,end_date,score,score_neg_status,negative_marking,cummilative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,question_status,question_size,score_type,max_options,off_message,voting_over_message,voting_footer_message,active_status,footer_link,footer_sept,diplay_add,header_upload,footer_upload,key_status,keyword,key_alias_status,short_code from voting_detail where voting_id='" . $cnts_id . "' and companyName='" . $compName . "' limit 1";
+$sqlquery = "select voting_name,welcome_message,voting_type,start_date,end_date,score,score_neg_status,negative_marking,cummilative_score,today_score,weekly_score,bill_status,application_id,price_status,price_pt,question_status,question_size,score_type,max_options,off_message,voting_over_message,voting_footer_message,active_status,footer_link,footer_sept,diplay_add,header_upload,footer_upload,key_status,keyword,key_alias_status,short_code from voting_detail where voting_id='" . $cnts_id . "' and login='" . $login_form . "' limit 1";
 //echo $sqlquery . "<br/>";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row=mysql_fetch_row($result)){
@@ -125,7 +120,7 @@ while($row = mysql_fetch_row($result)){
 	$q_exit = 1;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -160,12 +155,8 @@ if(!$cnts_name){
 
 							<?if ($q_exit == 0){?>
 								<TD width="474px" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Question View</TD>
-								<TD width="120px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question.php?login=<? echo $login_form ?>&smenu=<? echo $smenu; ?>&sess_id=<? echo $sess_id; ?>&v_flag=<? echo $v_flag ?>&cnts_id=<? echo $cnts_id ?>&cnt=1&sg=<? echo $sg ?>&cpName=<? echo $compName ?>" ><img onmouseover="this.src='images/Add_Voting_Question_01.gif';" onmouseout="this.src='images/Add_Voting_Question.gif'" src="images/Add_Voting_Question.gif"/></a></TD>
-								
-								
-								<TD width="70px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&flag=1&cnts_id=<? echo $cnts_id ?>&cpName=<? echo $compName ?>&action=2"><img onmouseover="this.src='images/Edit_Voting_01.gif';" onmouseout="this.src='images/Edit_Voting.gif'" src="images/Edit_Voting.gif"/></a></TD>
-								
-								
+								<TD width="120px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question.php?login=<? echo $login_form ?>&smenu=<? echo $smenu; ?>&sess_id=<? echo $sess_id; ?>&v_flag=<? echo $v_flag ?>&cnts_id=<? echo $cnts_id ?>&cnt=1&sg=<? echo $sg ?>" ><img onmouseover="this.src='images/Add_Voting_Question_01.gif';" onmouseout="this.src='images/Add_Voting_Question.gif'" src="images/Add_Voting_Question.gif"/></a></TD>
+								<TD width="70px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&flag=1&cnts_id=<? echo $cnts_id ?>&action=2"><img onmouseover="this.src='images/Edit_Voting_01.gif';" onmouseout="this.src='images/Edit_Voting.gif'" src="images/Edit_Voting.gif"/></a></TD>
 								<TD width="80px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:document.voting_view.cnt.value='1';if (confirm('Are You sure you want to delete this voting?')==true){document.voting_view.submit();}else{void('null');}"><img onmouseover="this.src='images/Delete_Voting_01.gif';" onmouseout="this.src='images/Delete_Voting.gif'" src="images/Delete_Voting.gif"/></a></TD>
 
 								<!--<TD width="454px" align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Voting Management</TD>
@@ -174,12 +165,9 @@ if(!$cnts_name){
 								<TD width="90px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:document.voting_view.cnt.value='1';if (confirm('Are You sure you want to delete this voting?')==true){document.voting_view.submit();}else{void('null');}"><img onmouseover="this.src='images/Delete_Voting_01.gif';" onmouseout="this.src='images/Delete_Voting.gif'" src="images/Delete_Voting.gif"/></a></TD>
 								-->
 							<?}else{?>
-							
 								<TD width="454px" align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Voting Management</TD>
 								<TD width="129px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"></TD>
-								
-								<TD width="75px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&flag=1&cnts_id=<? echo $cnts_id ?>&cpName=<? echo $compName ?>&action=2"><img onmouseover="this.src='images/Edit_Voting_01.gif';" onmouseout="this.src='images/Edit_Voting.gif'" src="images/Edit_Voting.gif"/></a></TD>
-								
+								<TD width="75px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_modify.php?login=<? echo $login_form ?>&sess_id=<? echo $sess_id; ?>&flag=1&cnts_id=<? echo $cnts_id ?>&action=2"><img onmouseover="this.src='images/Edit_Voting_01.gif';" onmouseout="this.src='images/Edit_Voting.gif'" src="images/Edit_Voting.gif"/></a></TD>
 								<TD width="90px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:document.voting_view.cnt.value='1';if (confirm('Are You sure you want to delete this voting?')==true){document.voting_view.submit();}else{void('null');}"><img onmouseover="this.src='images/Delete_Voting_01.gif';" onmouseout="this.src='images/Delete_Voting.gif'" src="images/Delete_Voting.gif"/></a></TD>
 							<?}?>
 						</tr>
@@ -383,7 +371,6 @@ if(!$cnts_name){
 							<?print "<input type =hidden name=action value =3>";?>
 							<?print "<input type =hidden name = smenu value =$smenu>";?>
 							<?print "<input type =hidden name=treeview_cod value =$treeview_cod>";?>
-							<?print "<input type =hidden name=cpName value ='".$compName."'>";?>
 								</table>
 							</td>
 						</tr>

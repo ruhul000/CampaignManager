@@ -8,35 +8,15 @@ $grp_id = $_REQUEST["grp_id"];
 $msg_alert = $_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-//------------------------------------------- ODL ----------------------------------------
-// $sqlquery = "select cp_name,login,login_type from access_detail where id='" . $grp_id . "'";
-// $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
-// while($row = mysql_fetch_row($result)){
-// 	$grp_name = $row[0];
-// 	$grp_desc = $row[1];
-// 	$login_type = $row[2];
-// }
-//------------------------------------------- ODL ----------------------------------------
-//------------------------------------------- NEW ----------------------------------------
-	$sqlquery = "select * from access_detail where id='" . $grp_id . "'";
-	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
+$sqlquery = "select cp_name,login from access_detail where id='" . $grp_id . "'";
+$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
+while($row = mysql_fetch_row($result)){
+	$grp_name = $row[0];
+	$grp_desc = $row[1];
+}
 
-	while($row = mysql_fetch_row($result)){
-		$login_name = $row[2];
-		$password = $row[3];
-		$login_type = $row[4];
-		$name = $row[9];
-		$company_Name = $row[10];
-		$address = $row[11];
-		$email = $row[12];
-		$contactNo = $row[13];
-		$uType = $row[14];
-	}
-	echo $company_Name." | ";
-	echo $uType." | " ;
-//------------------------------------------- NEW ----------------------------------------
 if($msg_alert==""){
 	$msg="Login Modify Choose";
 }else{
@@ -106,8 +86,7 @@ if(!$grp_id){
 						<td width="340px"></td>
 						<td width="178px"></td>
 					</tr>
-		<!--------------------- KYC - INFORMAITION --------------------->
-		
+
 					<?if (strlen($msg_alert) > 0){?>
 					<tr height="16px" bgcolor="#D9D9A8">
 						<TD colspan="3" align="center" class="bold_red_text">&nbsp;&nbsp;<?echo $msg_alert; ?></TD>
@@ -128,17 +107,15 @@ if(!$grp_id){
 						<td colspan="3"></td>
 					</tr>
 
-
 					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Login Name&nbsp;:&nbsp;</td>
-							<td align="left" valign="top" class="WorkGreen">
-								<input type="text" name="login_name" id="login_name" size="45" class="input" 
-									value="<? echo $login_name; ?>"
-									onmouseover="showIT('Enter the login name.')"
-									onmouseout="showIT()" />
-							</td>
-						<td>&nbsp;</td>
-					</tr>
+						<td align="right" valign="top" class="WorkGreen">Login
+						Name&nbsp;:&nbsp;</TD>
+						<td align="left" valign="top" class="WorkGreen"><input type="text"
+							name="login_name" value="<? echo $grp_desc; ?>" size="45"
+							class="input" onmouseover="showIT('Enter the Login name.')"
+							onmouseout="showIT()" /></TD>
+						<TD>&nbsp;</TD>
+					</TR>
 
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
@@ -146,118 +123,13 @@ if(!$grp_id){
 
 					<tr height="16px" bgcolor="#D9D9A8">
 						<td align="right" valign="top" class="WorkGreen">Password&nbsp;:&nbsp;</TD>
-							<td align="left" valign="top" class="WorkGreen">
-								<input type="password" name="password" id="password" size="45" class="input" 
-									value="<? echo $password; ?>" 
-									onmouseover="showIT('Enter the password.')"
-									onmouseout="showIT()" />
-							</td>
-						<td>&nbsp;</td>
-					</tr>
+						<td align="left" valign="top" class="WorkGreen"><input type="password"
+							name="password" value="" size="45"
+							class="input" onmouseover="showIT('Enter the password.')"
+							onmouseout="showIT()" /></TD>
+						<TD>&nbsp;</TD>
+					</TR>
 
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Name&nbsp;:&nbsp;</TD>
-							<td align="left" valign="top" class="WorkGreen">
-								<input type="text" name="name" id="name"size="45" class="input" 
-									value="<? echo $name; ?>" 
-								    onmouseover="showIT('Enter the name.')"
-									onmouseout="showIT()" />
-							</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-					
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Company Name&nbsp;:&nbsp;</TD>
-							<td align="left" valign="top" class="WorkGreen">
-							<?php if($login_type ==1){?>
-								<input type="text" name="company_name" id="company_name"  size="45" class="input" 
-									value="<?php echo  $company_Name; ?>" 
-								    onmouseover="showIT('Enter the company name.')"
-									onmouseout="showIT()" />
-							<?}else{?>
-							
-							<input type="text" name="company_name" id="company_name"  size="45" class="input" 
-									value="<?php echo  $company_Name; ?>" readonly />
-							<?}?>
-							</td>
-						<td>&nbsp;</td>
-					</tr>
-					
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Address&nbsp;:&nbsp;</TD>
-							<td align="left" valign="top" class="WorkGreen">
-								<input type="text" name="address" id="address" size="45" class="input" 
-									value="<? echo $address; ?>"
-								    onmouseover="showIT('Enter the address.')"
-									onmouseout="showIT()" />
-							</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Email&nbsp;:&nbsp;</TD>
-							<td align="left" valign="top" class="WorkGreen">
-								<input type="text" name="email" id="email" size="45" class="input" 
-									value="<? echo $email; ?>"
-								    onmouseover="showIT('Enter the email address.')"
-									onmouseout="showIT()" />
-							</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Contact No&nbsp;:&nbsp;</td>
-							<td align="left" valign="top" class="WorkGreen">
-								<input type="text" name="contact_no" id="contact_no" size="45" class="input" 
-									value="<? echo $contactNo; ?>" 
-								    onmouseover="showIT('Enter the contact number.')"
-									onmouseout="showIT()" />
-							</td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-
-					<?php if($login_type == 2){?>
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">User Type&nbsp;:&nbsp;</td>
-							<td align="left" valign="top" class="WorkGreen">
-								<select name="userType" id="userType" 
-								onmouseover="showIT('Select the user type.')" 		
-								onmouseout="showIT()" />
-					
-							        <option value="Admin">Admin</option>
-							        <option value="Tech">Tech</option>
-							        <option value="Fin">Fin</option>
-							    
-							    </select>
-							</td>
-						<td>&nbsp;</td>
-					</tr>
-					<?}?>
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>
@@ -279,7 +151,6 @@ if(!$grp_id){
 					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
 					print "<input type=\"hidden\" name=\"grp_id\" value=" . $grp_id . ">";
 					print "<input type=\"hidden\" name=\"cp_name\" value=" . $grp_name . ">";
-					print "<input type=\"hidden\" name=\"login_type\" value=" . $login_type . ">";
 					?>
 				</table>
 				</td>

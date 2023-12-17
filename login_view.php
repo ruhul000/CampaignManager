@@ -7,28 +7,20 @@ $smenu=$_REQUEST["smenu"];
 $sess_id=$_REQUEST["sess_id"];
 $msg_alert = $_REQUEST["msg_alert"];
 $param =$_REQUEST["param"];
+
 $grp_id = $_REQUEST["grp_id"];
 
-//echo "param ".$param;
+
 
 if ($grp_id){
-	$sqlquery = "select * from access_detail where id='" . $grp_id . "'";
+	$sqlquery = "select login,password from access_detail where id='" . $grp_id . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 
 	while($row = mysql_fetch_row($result)){
-		$login_name = $row[2];
-		$password = $row[3];
-		$login_type = $row[4];
-		$name = $row[9];
-		$company_Name = $row[10];
-		$address = $row[11];
-		$email = $row[12];
-		$contactNo = $row[13];
-		$uType = $row[14];
+		$login_name = $row[0];
+		$password = $row[1];
 	}
-	echo $company_Name." | ";
-	echo $uType." | " ;
 }
 
 if($msg_alert==""){
@@ -43,8 +35,8 @@ hheader($smenu);
 tree_code ();
 workareatop_new();                     //workareatop();
 
-if($param==1){
-	//$msg_alert = "Sorry! No Login name found against your request. Please create Login";
+if(!$login_name && $param!=1){
+	$msg_alert = "Sorry! No Login name found against your request. Please create Login";
 	?>
 <table align="left" border="0" cellspacing="1" cellpadding="0"
 	width="748px" bgcolor="#525200">
@@ -131,7 +123,8 @@ if($param==1){
 					</tr>-->
 
 					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Login Name&nbsp;:&nbsp;</td>
+						<td align="right" valign="top" class="WorkGreen">Login
+						Name&nbsp;:&nbsp;</td>
 						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $login_name; ?></td>
 						<td>&nbsp;</td>
 					</tr>
@@ -145,67 +138,6 @@ if($param==1){
 						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $password; ?></td>
 						<td>&nbsp;</td>
 					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Name&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $name; ?></td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Company Name&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" bgcolor="#f4f4e4"><?php echo  $company_Name; ?></td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Address&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $address; ?></td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Email&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $email; ?></td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">Contact No&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $contactNo; ?></td>
-						<td>&nbsp;</td>
-					</tr>
-
-					<tr height="8px" bgcolor="#D9D9A8">
-						<td colspan="3"></td>
-					</tr>
-
-					<tr height="16px" bgcolor="#D9D9A8">
-						<td align="right" valign="top" class="WorkGreen">User Type&nbsp;:&nbsp;</td>
-						<td align="left" valign="top" bgcolor="#f4f4e4"><? echo $uType; ?></td>
-						<td>&nbsp;</td>
-					</tr>
-
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>

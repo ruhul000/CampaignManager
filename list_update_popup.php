@@ -115,7 +115,7 @@ $temp1=explode('/',$s_date);
 $temp_dt1=mktime($s_hour,$s_minute,'00',$temp1[0],$temp1[1],$temp1[2]);
 $temp2=explode('/',$e_date);
 $temp_dt2=mktime($e_hour,$e_minute,'00',$temp2[0],$temp2[1],$temp2[2]);
-$temp_dt0=time();
+$temp_dt0=mktime();
 
 if(!$rule_id){
 	$msg_alert = "Please Select SMS Message";

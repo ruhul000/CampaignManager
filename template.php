@@ -1,440 +1,343 @@
-<?php 
+<?php require("connection_mmc.php"); //adding connection file
+header("Content-type: text/html; charset=UTF-8");
 
-	require("connection_mmc.php"); //adding connection file
-	header("Content-type: text/html; charset=UTF-8");
-
-/* ====================================== Header Start ====================================================*/
-function hheader($smenu)
-{
-
+function hheader($smenu){
 	global $conn;
 	global $sess_id,$login_form;
 	global $questions_cnt, $question_id;
-	global $login_type;
-	global $companyName;
-	global $user_type;
-		
-	// echo "conn ".$conn;
-	// echo "sess_id ".$sess_id;
-	// echo "login form ".$login_form;
-	// echo "question cnt ".$questions_cnt;
-	// echo "question id ".$question_id;
-	
-	$sqlquery2 = "SELECT * FROM access_detail WHERE login='".$login_form."'";
-
-	$result2 = mysql_query($sqlquery2,$conn) or die('mysql error:' . mysql_error());
-	$i = 0;
-	while($row2 = mysql_fetch_row($result2))
-	{
-			
-			//echo " ".$login = $row2[2];
-			//echo " ".$login_type = $row2[4];
-			//echo " ".$companyName=$row2[10];
-			//echo " ".$user_type= $row2[14];
-			$login = $row2[2];
-			$login_type = $row2[4];
-			$companyName=$row2[10];
-			$user_type= $row2[14];
-			$i = $i + 1;
-	}
-
 	$archivelnk="";
-	if ($smenu==1)// -------------------- Group Management -------------------
-	{
-		$sqlquery = "select group_id,group_name from group_detail where archive!=1 and companyName='" . $companyName . "' order by group_id";
-		//echo "Query: ".$sqlquery;
+	if ($smenu==1) {
+		$sqlquery = " select group_id,group_name from group_detail where archive!=1 and login='" . $login_form . "' order by group_id";
 		$folderlevel="Create Group";
 		$pagelink="group_create.php";
 		$archivelnk="Archive Group";
 		$unarchivelnk="UnArchive Group";
-	}
-	else if ($smenu==2)// ---------------- Target Management -------------------
-	{
-		$sqlquery = "select target_id,target_name from target_detail where archive!=1 and companyName='" . $companyName . "' order by target_id desc";
+	}else if ($smenu==2) {
+		$sqlquery = "select target_id,target_name from target_detail where archive!=1 and login='" . $login_form . "' order by target_id desc";
 		$folderlevel="Create Target";
 		$pagelink="target.php";
 		$archivelnk="Archive Target";
 		$unarchivelnk="UnArchive Target";
 		$sublnk="DND Formulation";
 		$sublnk1="View DND";
-	}
-	else if ($smenu==3)// -------------------- Contest Management----------------
-	{
-		//echo " Contest : ".$login_form;
-		$sqlquery = "select contest_id, contest_name from contest_detail where archive!=1 and companyName='" . $companyName . "' order by contest_id";
-		//echo " ContestSQL : ".$sqlquery;
-		
+	}else if ($smenu==3) {
+		$sqlquery = "select contest_id, contest_name from contest_detail where archive!=1 and login='" . $login_form . "' order by contest_id";
 		$folderlevel="Create Contest";
 		$pagelink="contest_engine.php";
 		$archivelnk="Archive Contest";
 		$unarchivelnk="UnArchive Contest";
-	}
-	else if ($smenu==4)// -------------------- Bulk Sms Broadcast ---------------
-	{
-		echo "sms: ".$sqlquery = "select sms_id,message,language,sms_mode from rules_detail where archive!=1 and companyName='" . $companyName . "' order by sms_id";
+	}else if ($smenu==4) {
+		$sqlquery = "select sms_id,message,language,sms_mode from rules_detail where archive!=1 and login='" . $login_form . "' order by sms_id";
 		$folderlevel="Create SMS Broadcast";
 		$pagelink="bulksms_create.php";
 		//$archivelnk="Archive Bulk SMS";
 		$archivelnk="Archive SMS Broadcast";
 		$unarchivelnk="UnArchive SMS Broadcast";
-	}
-	else if ($smenu==5)// ------------------- Scheduler Management ------------------
-	{
-		$sqlquery = " select id,scheduler_name from list_detail where archive!=1 and companyName='" . $companyName . "'  order by id";
+	}else if ($smenu==5) {
+		$sqlquery = " select id,scheduler_name from list_detail where archive!=1 and login_created='" . $login_form . "' order by id";
 		$folderlevel="Create Scheduler";
 		$pagelink="list_create.php";
 		$archivelnk="Archive Scheduler";
 		$unarchivelnk="UnArchive Scheduler";
-	}
-	else if ($smenu==6) // ------------------ Voting Management ---------------------
-	{
-		$sqlquery = "select voting_id, voting_name from voting_detail where archive!=1 and companyName ='" . $companyName . "' order by voting_id";
+	}else if ($smenu==6) {
+		$sqlquery = "select voting_id, voting_name from voting_detail where archive!=1 and login='" . $login_form . "' order by voting_id";
 		$folderlevel="Create Voting";
 		$pagelink="voting_engine.php";
 		$archivelnk="Archive Voting";
 		$unarchivelnk="UnArchive Voting";
-	} 
-	else if ($smenu==7) // ----------------- MIS Report ------------------------
-	{
+	}else if ($smenu==7) {
 		$sqlquery = "select id,scheduler_name from list_detail where archive!=1 and login_created='" . $login_form . "' order by id";
 		$folderlevel="MIS";
 		$pagelink="mmc_management.php";
 		$archivelnk="Archive Scheduler";
 		$unarchivelnk="UnArchive Scheduler";
-	}
-	else if ($smenu==8) // ----------------- Map Field ------------------
-	{
+	}else if ($smenu==8) {
 		$sqlquery = "select target_id,target_name from target_detail where archive!=1 and login='" . $login_form . "' order by target_id desc";
 		$folderlevel="Create Map";
 		$pagelink="ValueMap.php";
 		$archivelnk="Archive Map";
 		$unarchivelnk="UnArchive Map";
 		$viewmaplnk="View Map";
-	}
-	else if ($smenu==9) // ----------------- Login Management --------------
-	{
-		if($login_type==1)
-		{
-			$sqlquery = "select id,login from access_detail where  login_type!=3 order by id desc";
-		}
-		else if($login_type==2)
-		{
-			$sqlquery = "select id,login from access_detail where login_type!=1 and companyName='".$companyName."'  order by id desc";
-		}
+	}else if ($smenu==9) {
+		$sqlquery = "select id,login from access_detail where  login is not null order by id desc";
 		//echo $sqlquery;
-		
 		$folderlevel="Create Login";
 		$pagelink="login_create.php";
-
-		
-		if($login_type==2)
-		{
-			$folderlevel="User Create";
-			$pagelink="user_create.php";
-		}
-		else if($login_type==3)
-		{
-			$folderlevel="";
-			$pagelink="";
-		}
+		//$archivelnk="Archive Map";
+		//$unarchivelnk="UnArchive Map";
+		//$viewmaplnk="View Map";
 	}
 
-
-
-	if ($smenu>=1 && $smenu<=9) 
-	{
+	if ($smenu>=1 && $smenu<=9) {
 		$result = mysql_query($sqlquery,$conn) or die('mysql error:' . mysql_error());
 		$i = 0;
-		while($row = mysql_fetch_row($result))
-		{
-			//echo "--: ".$cnts_id[$i] = $row[0];
-			//echo "--: ".$cnts_name[$i] = $row[1];
-			//echo "--: ".$lang_sms=$row[2];
-			//echo "--: ".$sms_mode = $row[3];
+		while($row = mysql_fetch_row($result)){
 			$cnts_id[$i] = $row[0];
 			$cnts_name[$i] = $row[1];
 			$lang_sms=$row[2];
 			$sms_mode = $row[3];
-
-			if($lang_sms=='Thai')
-			{
+			if($lang_sms=='Thai'){
 				$cnts_name[$i]=hexToStr($cnts_name[$i]);
 			}
-
-			if($sms_mode == 2)
-			{
-				$cnts_name[$i]= hexToStr($cnts_name[$i]);
-			}
+		if($sms_mode == 2){
+            		$cnts_name[$i]= hexToStr($cnts_name[$i]);
+	            }
 			$i = $i + 1;
 		}
 	}
-
-
-?>
-
+	?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
-<head> 
-	<title>Media Management Center <? echo date("l, M dS Y", time()); ?></title>
-	<meta name="Author" content="?">
-	<meta name="Keywords" content="?">
-	<meta name="Description" content="?">
-	<link rel="stylesheet" type="text/css" href="style/main.css" title="style">
-	<link rel="stylesheet" type="text/css" href="style/first.css" title="style">
-	<link rel="stylesheet" type="text/css" href="style/calendar.css" title="style">
-	<script src="script/ua.js"></script>
-	<script src="script/ftiens4.js"></script>
-	<script src="script/tooltip.js"></script>
-	<script src="script/client.js"></script>
-	<!-- <script src="script/newscript.js"></script> -->
-	<script src='script/choosedate_new.js'></script>
+<head>
+<title>Media Management Center <? echo date("l, M dS Y", mktime()); ?></title>
+<meta name="Author" content="?">
+<meta name="Keywords" content="?">
+<meta name="Description" content="?">
+<link rel="stylesheet" type="text/css" href="style/main.css"
+	title="style">
+<link rel="stylesheet" type="text/css" href="style/first.css"
+	title="style">
+<link rel="stylesheet" type="text/css" href="style/calendar.css"
+	title="style">
+<script src="script/ua.js"></script>
+<script src="script/ftiens4.js"></script>
+<script src="script/tooltip.js"></script>
+<script src="script/client.js"></script>
+<script src="script/newscript.js"></script>
+<script src='script/choosedate_new.js'></script>
 
-<!-- ==================================== Style Tag Start ======================================== -->
-	<style>
-		SPAN.TreeviewSpanArea A {
-			font-size: 11px;
-			font-family: arial;
-			align: left;
-			text-decoration: none;
-			color: #ffffff;
-		}
+<style>
+SPAN.TreeviewSpanArea A {
+	font-size: 11px;
+	font-family: arial;
+	align: left;
+	text-decoration: none;
+	color: #ffffff;
+}
 
-		SPAN.TreeviewSpanArea A:hover {
-			color: '#555753';
-		}
+SPAN.TreeviewSpanArea A:hover {
+	color: '#555753';
+}
 
-		BODY {
-			background-color: #F4F4E4;
-		}
+BODY {
+	background-color: #F4F4E4;
+}
 
-		TD {
-			font-size: 11px;
-			align: left;
-			font-family: arial, verdana, helvetica;
-		}
-	</style>
-<!-- =================================== Style Tag End  ============================== -->
+TD {
+	font-size: 11px;
+	align: left;
+	font-family: arial, verdana, helvetica;
+}
+</style>
+<SCRIPT>
+//
+// Copyright (c) 2006 by Conor O'Mahony.
+// For enquiries, please email GubuSoft@GubuSoft.com.
+// Please keep all copyright notices below.
+// Original author of TreeView script is Marcelino Martins.
+//
+// This document includes the TreeView script.
+// The TreeView script can be found at http://www.TreeView.net.
+// The script is Copyright (c) 2006 by Conor O'Mahony.
+//
+//
 
-<!-- =================================== javaScript  Start ============================= -->
-	<SCRIPT>
-	//
-	// Copyright (c) 2006 by Conor O'Mahony.
-	// For enquiries, please email GubuSoft@GubuSoft.com.
-	// Please keep all copyright notices below.
-	// Original author of TreeView script is Marcelino Martins.
-	//
-	// This document includes the TreeView script.
-	// The TreeView script can be found at http://www.TreeView.net.
-	// The script is Copyright (c) 2006 by Conor O'Mahony.
-	//
-	//
-
-	USETEXTLINKS = 1
-	STARTALLOPEN = 0
-	USEFRAMES = 0
-	USEICONS = 0
-	WRAPTEXT = 1
-	PRESERVESTATE = 1
-	ADDEXTPARMVAL = "?login=<? echo  $login_form ?>&sess_id=<? echo  $sess_id ?>&smenu=<? echo  $smenu ?>&cpName=<? echo  $companyName ?>&&trgt_selctn=1"
-	FOLDERLEVEL="<? echo $folderlevel; ?>"
-	PAGELINK="<? echo $pagelink; ?>"
-	
-	//
-	// The following code constructs the tree.  This code produces a tree that looks like:
-	//
-	// Tree Options
-	//  - Expand for example with pics and flags
-	//    - United States
-	//      - Boston
-	//      - Tiny pic of New York City
-	//      - Washington
-	//    - Europe
-	//      - London
-	//      - Lisbon
-	//  - Types of node
-	//    - Expandable with link
-	//      - London
-	//    - Expandable without link
-	//      - NYC
-	//    - Opens in new window
-	//
+USETEXTLINKS = 1
+STARTALLOPEN = 0
+USEFRAMES = 0
+USEICONS = 0
+WRAPTEXT = 1
+PRESERVESTATE = 1
+ADDEXTPARMVAL = "?login=<? echo  $login_form ?>&sess_id=<? echo  $sess_id ?>&smenu=<? echo  $smenu ?>&&trgt_selctn=1"
+FOLDERLEVEL="<? echo $folderlevel; ?>"
+PAGELINK="<? echo $pagelink; ?>"
+//
+// The following code constructs the tree.  This code produces a tree that looks like:
+//
+// Tree Options
+//  - Expand for example with pics and flags
+//    - United States
+//      - Boston
+//      - Tiny pic of New York City
+//      - Washington
+//    - Europe
+//      - London
+//      - Lisbon
+//  - Types of node
+//    - Expandable with link
+//      - London
+//    - Expandable without link
+//      - NYC
+//    - Opens in new window
+//
 
 
-	//foldersTree = gFld("<b>"+FOLDERLEVEL+" Test Folderlevel"+"</b>", "")
-	foldersTree = gFld("<b>"+FOLDERLEVEL+"</b>", "")
-		foldersTree.treeID = "Frameless"
-		<? if($archivelnk!="") { ?>
-		  <? if($smenu>=1){?>
-				level1 = insFld(foldersTree, gFld("<? echo $archivelnk; ?> ", "archive.php"+ADDEXTPARMVAL))
-				level1 = insFld(foldersTree, gFld("<? echo $unarchivelnk; ?> ", "unarchive.php"+ADDEXTPARMVAL))
-			<?}else if ($smenu == 61){?>
-				level1 = insFld(foldersTree, gFld("<? echo $archivelnk; ?> ", "archive.php"+ADDEXTPARMVAL))
-				level1 = insFld(foldersTree, gFld("<? echo $unarchivelnk; ?> ", "unarchive.php"+ADDEXTPARMVAL))
-			<?}?>
-		<?}?>
-		<? if($sublnk!="") { ?>
-			level2 = insFld(foldersTree, gFld("<? echo $sublnk; ?> ", "dnd.php"+ADDEXTPARMVAL))
-			level2 = insFld(foldersTree, gFld("<? echo $sublnk1; ?> ", "view_dnd.php"+ADDEXTPARMVAL))
-		<?}?>
-		<? if($viewmaplnk!="") { ?>
-			level3 = insFld(foldersTree, gFld("<? echo $viewmaplnk; ?> ", "view_map.php"+ADDEXTPARMVAL))
-		<?}?>
+foldersTree = gFld("<b>"+FOLDERLEVEL+"</b>", "")
+    foldersTree.treeID = "Frameless"
+    <? if($archivelnk!="") { ?>
+      <? if($smenu>=1){?>
+			level1 = insFld(foldersTree, gFld("<? echo $archivelnk; ?> ", "archive.php"+ADDEXTPARMVAL))
+    		level1 = insFld(foldersTree, gFld("<? echo $unarchivelnk; ?> ", "unarchive.php"+ADDEXTPARMVAL))
+    	<?}else if ($smenu == 61){?>
+    		level1 = insFld(foldersTree, gFld("<? echo $archivelnk; ?> ", "archive.php"+ADDEXTPARMVAL))
+    		level1 = insFld(foldersTree, gFld("<? echo $unarchivelnk; ?> ", "unarchive.php"+ADDEXTPARMVAL))
+    	<?}?>
+    <?}?>
+    <? if($sublnk!="") { ?>
+    	level2 = insFld(foldersTree, gFld("<? echo $sublnk; ?> ", "dnd.php"+ADDEXTPARMVAL))
+    	level2 = insFld(foldersTree, gFld("<? echo $sublnk1; ?> ", "view_dnd.php"+ADDEXTPARMVAL))
+    <?}?>
+    <? if($viewmaplnk!="") { ?>
+    	level3 = insFld(foldersTree, gFld("<? echo $viewmaplnk; ?> ", "view_map.php"+ADDEXTPARMVAL))
+    <?}?>
 
 
 
-		aux1 = insFld(foldersTree, gFld(FOLDERLEVEL, PAGELINK+ADDEXTPARMVAL))
-		//aux1 = insFld(foldersTree, gFld(FOLDERLEVEL+" Test Level", PAGELINK+ADDEXTPARMVAL))
-			<?
-			if($smenu==1){
-				 for($i=0; $i<count($cnts_id); $i++){?>
+     aux1 = insFld(foldersTree, gFld(FOLDERLEVEL, PAGELINK+ADDEXTPARMVAL))
+        <?
+        if($smenu==1){
+        	 for($i=0; $i<count($cnts_id); $i++){?>
 
-					ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>"
-					aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "group_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        	    ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>"
+                aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "group_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
 
-					<?
-					$sublevel=chk_sublevel ($smenu,$cnts_id[$i],$companyName);
-					if($sublevel[0]['id']){
-						for($k=0,$max=count($sublevel);$k<$max;$k++){?>
-							ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>&sgrp_id=<? echo  $sublevel[$k]['id']; ?>"
-							aux3 = insFld(aux2, gFld("<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "subgroup_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?  }
-					}else{?>
-						ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>"
-						aux3 = insFld(aux2, gFld("Add Sub Groups", "subgroup_create.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?}
-				 }
-			}else if($smenu==2){
-				for($i=0; $i<count($cnts_id); $i++){?>
-					ADDEXTPARMVAL_MORE = "&target_id=<? echo  $cnts_id[$i] ?>"
-					aux2 = insFld(aux1, gFld("<? echo substr($cnts_name[$i],0,20); ?>", "target_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-				   <?
-				}
-			}else if($smenu==3){
-				for($i=0; $i<count($cnts_id); $i++){?>
-					ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i] ?>"
-					aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "contest_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        		<?
+        		$sublevel=chk_sublevel ($smenu,$cnts_id[$i]);
+        		if($sublevel[0]['id']){
+        		    for($k=0,$max=count($sublevel);$k<$max;$k++){?>
+                        ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>&sgrp_id=<? echo  $sublevel[$k]['id']; ?>"
+        		        aux3 = insFld(aux2, gFld("<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "subgroup_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        		<?  }
+        		}else{?>
+                    ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>"
+                    aux3 = insFld(aux2, gFld("Add Sub Groups", "subgroup_create.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        		<?}
+             }
+        }else if($smenu==2){
+            for($i=0; $i<count($cnts_id); $i++){?>
+                ADDEXTPARMVAL_MORE = "&target_id=<? echo  $cnts_id[$i] ?>"
+                aux2 = insFld(aux1, gFld("<? echo substr($cnts_name[$i],0,20); ?>", "target_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+               <?
+            }
+        }else if($smenu==3){
+            for($i=0; $i<count($cnts_id); $i++){?>
+                ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i] ?>"
+                aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "contest_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
 
-				   <?
-					$sublevel=chk_sublevel ($smenu,$cnts_id[$i],$companyName);
-					if($sublevel[0]['id']){
-						for($k=0,$max=count($sublevel);$k<$max;$k++){?>
-							ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>&question_id=<? echo  $sublevel[$k]['id']; ?>"
-							QNO = "<? echo $k+1;?>";
-							aux3 = insFld(aux2, gFld("Q"+QNO+":"+"<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "question_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					  <?}
-					}else{?>
-						ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>"
-						aux3 = insFld(aux2, gFld("Add Contest Questions", "contest_question.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?}
+               <?
+                $sublevel=chk_sublevel ($smenu,$cnts_id[$i]);
+				if($sublevel[0]['id']){
+                    for($k=0,$max=count($sublevel);$k<$max;$k++){?>
+                        ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>&question_id=<? echo  $sublevel[$k]['id']; ?>"
+                        QNO = "<? echo $k+1;?>";
+                        aux3 = insFld(aux2, gFld("Q"+QNO+":"+"<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "question_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+                  <?}
+                }else{?>
+                    ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>"
+                    aux3 = insFld(aux2, gFld("Add Contest Questions", "contest_question.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+                <?}
 
-				}
-			}else if($smenu==4){
-				for($i=0; $i<count($cnts_id); $i++){?>
-					ADDEXTPARMVAL_MORE = "&sms_id=<? echo  $cnts_id[$i] ?>"
-					aux2 = insFld(aux1, gFld("<? echo substr($cnts_name[$i],0,15); ?>", "bulksms_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-				   <?
-				}
-			}else if($smenu==5){
-				 for($i=0; $i<count($cnts_id); $i++){?>
-					 ADDEXTPARMVAL_MORE = "&list_id=<? echo  $cnts_id[$i] ?>"
-					 aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "list_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?
-				 }
-			}else if($smenu==6){
-				for($i=0; $i<count($cnts_id); $i++){?>
-					ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i] ?>"
-					aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "voting_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+            }
+        }else if($smenu==4){
+            for($i=0; $i<count($cnts_id); $i++){?>
+                ADDEXTPARMVAL_MORE = "&sms_id=<? echo  $cnts_id[$i] ?>"
+                aux2 = insFld(aux1, gFld("<? echo substr($cnts_name[$i],0,15); ?>", "bulksms_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+               <?
+            }
+        }else if($smenu==5){
+             for($i=0; $i<count($cnts_id); $i++){?>
+                 ADDEXTPARMVAL_MORE = "&list_id=<? echo  $cnts_id[$i] ?>"
+                 aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "list_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+                <?
+             }
+ 		}else if($smenu==6){
+            for($i=0; $i<count($cnts_id); $i++){?>
+                ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i] ?>"
+                aux2 = insFld(aux1, gFld("<?echo $cnts_name[$i];?>", "voting_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
 
-				   <?
-					$sublevel=chk_sublevel ($smenu,$cnts_id[$i],$companyName);
-					if($sublevel[0]['id']){
-						for($k=0,$max=count($sublevel);$k<$max;$k++){?>
-							ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>&question_id=<? echo  $sublevel[$k]['id']; ?>"
-							QNO = "<? echo $k+1;?>";
-							aux3 = insFld(aux2, gFld("<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "voting_question_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					  <?}
-					}else{?>
-						ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>"
-						aux3 = insFld(aux2, gFld("Add Voting Question", "voting_question.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?}
+               <?
+                $sublevel=chk_sublevel ($smenu,$cnts_id[$i]);
+				if($sublevel[0]['id']){
+                    for($k=0,$max=count($sublevel);$k<$max;$k++){?>
+                        ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>&question_id=<? echo  $sublevel[$k]['id']; ?>"
+                        QNO = "<? echo $k+1;?>";
+                        aux3 = insFld(aux2, gFld("<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "voting_question_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+                  <?}
+                }else{?>
+                    ADDEXTPARMVAL_MORE = "&cnts_id=<? echo  $cnts_id[$i]; ?>"
+                    aux3 = insFld(aux2, gFld("Add Voting Question", "voting_question.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+                <?}
 
-				}
-			}else if($smenu==7){
-				?>
-				ADDEXTPARMVAL_MORE = "&cnts_id="
-				aux2 = insFld(aux1, gFld("Contest", "mmc_management.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-				ADDEXTPARMVAL_MORE = "&cnts_id=&question_id="
-					aux3 = insFld(aux2, gFld("MSISDN Wise Report", "msisdnmis.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					aux3 = insFld(aux2, gFld("Date Wise Score", "datewisescore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					aux3 = insFld(aux2, gFld("Keyword Wise Report", "keywordmis.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					aux3 = insFld(aux2, gFld("Top Scorer", "topscore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					aux3 = insFld(aux2, gFld("CDR", "cdr.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+            }
+ 		}else if($smenu==7){
+			?>
+			ADDEXTPARMVAL_MORE = "&cnts_id="
+			aux2 = insFld(aux1, gFld("Contest", "mmc_management.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+			ADDEXTPARMVAL_MORE = "&cnts_id=&question_id="
+				aux3 = insFld(aux2, gFld("MSISDN Wise Report", "msisdnmis.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				aux3 = insFld(aux2, gFld("Date Wise Score", "datewisescore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				aux3 = insFld(aux2, gFld("Keyword Wise Report", "keywordmis.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				aux3 = insFld(aux2, gFld("Top Scorer", "topscore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				aux3 = insFld(aux2, gFld("CDR", "cdr.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
 
-				ADDEXTPARMVAL_MORE = "&cnts_id="
-				aux2 = insFld(aux1, gFld("Voting", "mmc_management.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-				ADDEXTPARMVAL_MORE = "&$mistype=2"
-					aux3 = insFld(aux2, gFld("MSISDN Wise Report", "vmsisdnmis.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					//aux3 = insFld(aux2, gFld("Date Wise Score", "vdatewisescore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					//aux3 = insFld(aux2, gFld("Top Scorer", "vtopscore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					aux3 = insFld(aux2, gFld("CDR", "vcdr.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+			ADDEXTPARMVAL_MORE = "&cnts_id="
+			aux2 = insFld(aux1, gFld("Voting", "mmc_management.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+			ADDEXTPARMVAL_MORE = "&$mistype=2"
+				aux3 = insFld(aux2, gFld("MSISDN Wise Report", "vmsisdnmis.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				//aux3 = insFld(aux2, gFld("Date Wise Score", "vdatewisescore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				//aux3 = insFld(aux2, gFld("Top Scorer", "vtopscore.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+				aux3 = insFld(aux2, gFld("CDR", "vcdr.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
 
-				//ADDEXTPARMVAL_MORE = "&cnts_id="
-				//aux2 = insFld(aux1, gFld("View Scheduler", "mmc_management.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-				<?//for($i=0; $i<count($cnts_id); $i++){?>
-					 //ADDEXTPARMVAL_MORE = "&list_id=<? echo  $cnts_id[$i] ?>"
-					 //aux3 = insFld(aux2, gFld("<?echo $cnts_name[$i];?>", "scheduler_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-				<?//}
-			}elseif($smenu==9){
-				 for($i=0; $i<count($cnts_id); $i++){?>
+			//ADDEXTPARMVAL_MORE = "&cnts_id="
+			//aux2 = insFld(aux1, gFld("View Scheduler", "mmc_management.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+            <?//for($i=0; $i<count($cnts_id); $i++){?>
+                 //ADDEXTPARMVAL_MORE = "&list_id=<? echo  $cnts_id[$i] ?>"
+                 //aux3 = insFld(aux2, gFld("<?echo $cnts_name[$i];?>", "scheduler_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+            <?//}
+        }elseif($smenu==9){
+        	 for($i=0; $i<count($cnts_id); $i++){?>
 
-					ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>"
-					aux2 = insFld(aux1, gFld("<?if($cnts_name[$i]!='null')echo $cnts_name[$i];?>", "login_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        	    ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>"
+                aux2 = insFld(aux1, gFld("<?if($cnts_name[$i]!='null')echo $cnts_name[$i];?>", "login_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
 
-					<?
-					//$sublevel=chk_sublevel ($smenu,$cnts_id[$i]);
-					/*if($sublevel[0]['id']){
-						for($k=0,$max=count($sublevel);$k<$max;$k++){?>
-							ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>&sgrp_id=<? echo  $sublevel[$k]['id']; ?>"
-							aux3 = insFld(aux2, gFld("<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "subgroup_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?  }
-					}else{?>
-						ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>"
-						aux3 = insFld(aux2, gFld("Add Sub Groups", "subgroup_create.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
-					<?}*/
-				 }
+        		<?
+        		//$sublevel=chk_sublevel ($smenu,$cnts_id[$i]);
+        		/*if($sublevel[0]['id']){
+        		    for($k=0,$max=count($sublevel);$k<$max;$k++){?>
+                        ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>&sgrp_id=<? echo  $sublevel[$k]['id']; ?>"
+        		        aux3 = insFld(aux2, gFld("<? echo substr($sublevel[$k]['cnt'],0,20); ?>", "subgroup_view.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        		<?  }
+        		}else{?>
+                    ADDEXTPARMVAL_MORE = "&grp_id=<? echo  $cnts_id[$i]; ?>&grp_name=<? echo  $cnts_name[$i]; ?>"
+                    aux3 = insFld(aux2, gFld("Add Sub Groups", "subgroup_create.php"+ADDEXTPARMVAL+ADDEXTPARMVAL_MORE))
+        		<?}*/
+             }
 
-			}
+}
 
-	?>
-	
-	
-	</SCRIPT>
-	 <!-- =========================================== javaScript  End ==================================== -->
-</head> 
+?>
+</SCRIPT>
+</head>
 
-<body bgcolor="#ebf3fa" text="#000000" link="#525200" vlink="#525200" alink="#525200" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
- <!-- =========================================== Table Open ==================================== -->
-<table border="0" cellspacing="0" cellpadding="0" width="960" align="center">
+<body bgcolor="#ebf3fa" text="#000000" link="#525200" vlink="#525200"
+	alink="#525200" leftmargin="0" topmargin="0" marginheight="0"
+	marginwidth="0">
+<table border="0" cellspacing="0" cellpadding="0" width="960"
+	align="center">
 	<tr height="84px">
-		<td align="center" valign="top">
-			<img src="images/top_header1.gif" alt="banner" border="0" height="84" width="960px" />
-		</td>
+		<td align="center" valign="top"><img src="images/top_header1.gif"
+			alt="banner" border="0" height="84" width="960px" /></td>
 	</tr>
 	<tr>
 		<td align="left" valign="top" background="images/top_header2.gif">
-		
-		<table border="0" cellspacing="0" cellpadding="0" width="960" align="center">
-			
+		<table border="0" cellspacing="0" cellpadding="0" width="960"
+			align="center">
 			<tr height="22">
 				<td align="left" class="WorkWht">&nbsp;&nbsp;&nbsp;&nbsp;Welcome <? echo ucfirst($login_form); ?></td>
-				<td align="right" class="WorkWht">
-					<? echo date("l, M dS Y", time()); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<a class="item1" href="logout.php"/>
-				<? if($smenu=='login'){echo "Close";}else{echo "Logout"; } ?>&nbsp;&nbsp;&nbsp;&nbsp; 
-			
-				</td>
+				<td align="right" class="WorkWht"><? echo date("l, M dS Y", mktime()); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+					class="item1" href="javascript:void(0)"
+					; onClick="JavaScript:closeWindow();" /><? if($smenu=='login'){echo "Close";}else{echo "Logout";}?>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			</tr>
-		
 		</table>
 		</td>
 	</tr>
@@ -445,39 +348,44 @@ function hheader($smenu)
 		<table border="0" cellspacing="0" cellpadding="0" width="960"
 			align="center">
 			<tr height="32">
-			<?if($login_type==1 || $login_type==2){?>
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=9">Login Management</a>
-				</td>
-		    <?}?>
-		    <?if($user_type != 'Fin'){?>
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=1">Group Management</a>
-				</td>
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=8">Map Field</a>
-				</td>
-				<td width="170" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=2">Target Buildup</a>
-				</td>
+			<?if($login_form=='admin'){ ?>
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=9">Login
+				Management</a></td>
+				<?} ?>
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=1">Group
+				Management</a></td>
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=8">Map
+				Field</a></td>
+				<td width="170" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=2">Target
+				Buildup</a></td>
 				<!--                        <td width="200" align="center" valign="middle" background="images/menu1.gif"><a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=3">Contest Management</a></td>
-						<td width="200" align="center" valign="middle" background="images/menu1.gif"><a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=6">Voting Management</a></td>-->
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=4">Bulk SMS Broadcast</a>
-				</td>
-				<td width="170" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=5">Scheduler</a>
-				</td>
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=3">Contest Management</a>
-				</td>
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=6">Voting Management</a>
-				</td>
-			<?}?>
-				<td width="210" align="center" valign="middle" background="images/menu1.gif">
-					<a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=7">MIS</a>
-				</td>
+                        <td width="200" align="center" valign="middle" background="images/menu1.gif"><a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=6">Voting Management</a></td>-->
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=4">Bulk
+				SMS Broadcast</a></td>
+				<td width="170" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=5">Scheduler</a></td>
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=3">Contest
+				Management</a></td>
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=6">Voting
+				Management</a></td>
+				<td width="210" align="center" valign="middle"
+					background="images/menu1.gif"><a class="item1"
+					href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=7">MIS</a></td>
 				<!--<td width="170" align="center" valign="middle" background="images/menu1.gif"><a class="item1" href="mmc_management.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&smenu=7">MIS</a></td>-->
 			</tr>
 		</table>
@@ -496,69 +404,54 @@ function hheader($smenu)
 		</table>
 		</td>
 	</tr>
-	
 	<?
-}   
-//====================================== Header End ====================================================
+}    //close header
 
-//====================================== Tree Code Start ===============================================
 
-function tree_code()
-{
+function tree_code(){
 	global $script_footer;
-
 	?>
-
 	<tr>
 		<td>
-
-		<table border="0" cellspacing="0" cellpadding="0" width="960" align="center">
+		<table border="0" cellspacing="0" cellpadding="0" width="960"
+			align="center">
 			<tr>
-				<td bgcolor="#F4F4E4" width="20%" valign="top">
-					<font size="-2">
-						<a style="font-size: 7pt; text-decoration: none; color: #F4F4E4" href="http://www.treemenu.net/" target=_blank></a>
-					</font> 
-					<span class="WorkWht">
-						<script>initializeDocument()</script>
-						<noscript>A tree for site navigation will open here if you enable JavaScript in your browser.</noscript>
-				    </span>
-				</td>
-					
-					<?
-}
+				<td bgcolor="#F4F4E4" width="20%" valign="top"><font size="-2"><a
+					style="font-size: 7pt; text-decoration: none; color: #F4F4E4"
+					href="http://www.treemenu.net/" target=_blank></a></font> <span
+					class="WorkWht"><script>initializeDocument()</script>
+				<noscript>A tree for site navigation will open here if you enable
+				JavaScript in your browser.</noscript>
+				</span></td>
+				<?}
+
+
 
 				/****''*****WorkTop New*********/
-				function workareatop_new()
-				{
+				function workareatop_new(){
 					?>
-
-					<TD bgcolor="#F4F4E4" align="left" width="70%" valign="top"><br><br>
-					
-					<?
+				<TD bgcolor="#F4F4E4" align="left" width="70%" valign="top"><br>
+				<br>
+				<?
 				}
 
-				/*********WorkTop New*********/
-				function workareatop()
-				{
+				/****''*****WorkTop New*********/
+				function workareatop(){
 					?>
-					
-					<TD bgcolor="#F4F4E4" align="left" width="70%">
-
-					<?
+				
+				
+				<TD bgcolor="#F4F4E4" align="left" width="70%"><?
 				}
 
 				/****''*****WorkBot*********/
 				function workareabottom()
 				{
-					?> <!-- End of Workarea -->
-						
-					</TD>
+					?> <!-- End of Workarea --></TD>
 			</TR>
 		</TABLE>
-
 		</TD>
 	</TR>
-					<?
+	<?
 				}
 
 
@@ -567,22 +460,23 @@ function tree_code()
 					?>
 
 </table>
+<div id="toolTipLayer"
+	style="position: absolute; visibility: hidden; left: 0; right: 0"><!-- <div id="TTipes" style="position:absolute;height:25px; z-index:1; display:none; background='#ff00ff'"></div> -->
+<!--
+<script type="text/javascript">
+    var ddm1 = new DropDownMenu1('menu1');
+    ddm1.position.top = -1;
+    ddm1.init();
+</script>
+-->
 
-					<div id="toolTipLayer" style="position: absolute; visibility: hidden; left: 0; right: 0">
-					<!-- <div id="TTipes" style="position:absolute;height:25px; z-index:1; display:none; background='#ff00ff'"></div> -->
-					<!-- <script type="text/javascript">
-							var ddm1 = new DropDownMenu1('menu1');
-							ddm1.position.top = -1;
-							ddm1.init();
-						</script> 
-					-->
 </body>
 </html>
 					<?
 				}
 
 
-//========================================= Footer Start  ==========================================
+
 				function ffooter(){
 					?>
 </table>
@@ -594,11 +488,11 @@ function tree_code()
 
 
 					function getmonth($m=0) {
-						return (($m==0 ) ? date("F") : date("F", time(0,0,0,$m)));
+						return (($m==0 ) ? date("F") : date("F", mktime(0,0,0,$m)));
 					}
 
 					function getday($m=0) {
-						return (($m==0 ) ? date("l") : date("l", time(0,0,0,$m)));
+						return (($m==0 ) ? date("l") : date("l", mktime(0,0,0,$m)));
 					}
 
 					function ShowTime()
@@ -799,28 +693,22 @@ function tree_code()
 						return $tree_url;
 					}
 
-					function chk_sublevel ($level,$levelid,$compName)
+					function chk_sublevel ($level,$levelid)
 					{
 						global $conn, $login_form;
 						$sublevel=array();
 
-						if ($level==1) 
-						{
-							$sqlquery = "select subgroup_name,subgroup_id from subgroup_detail where group_id='" . $levelid . "' and companyName='" . $compName . "' order by subgroup_id";
-						}
-						else if ($level==3) 
-						{
-							$sqlquery = "select question, id from contest_questions where contest_id='" . $levelid . "' and companyName='" . $compName . "' order by ques_no";
-						}
-						else if ($level==6) 
-						{
-							$sqlquery = "select question, id from voting_questions where voting_id='" . $levelid . "' and companyName='" . $compName . "' order by ques_no";
+						if ($level==1) {
+							$sqlquery = "select subgroup_name,subgroup_id from subgroup_detail where group_id='" . $levelid . "' and login='" . $login_form . "' order by subgroup_id";
+						}else if ($level==3) {
+							$sqlquery = "select question, id from contest_questions where contest_id='" . $levelid . "' and login='" . $login_form . "' order by ques_no";
+						}else if ($level==6) {
+							$sqlquery = "select question, id from voting_questions where voting_id='" . $levelid . "' and login='" . $login_form . "' order by ques_no";
 						}
 
 						$result = mysql_query($sqlquery,$conn) or die('mysql error:' . mysql_error());
 						$i = 0;
-						while($row = mysql_fetch_row($result))
-						{
+						while($row = mysql_fetch_row($result)){
 							$sublevel[$i]["cnt"] = $row[0];
 							$sublevel[$i]["id"] = $row[1];
 							$i++;

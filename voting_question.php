@@ -1,12 +1,8 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 
-echo "<br>Voting Q: ".$compName = $_REQUEST["cpName"];
 $login_form = $_REQUEST["login"];
 $sess_id = $_REQUEST["sess_id"];
 $msg_alert = $_REQUEST["msg_alert"];
@@ -38,7 +34,7 @@ workareatop_new();
 $ques_no = voting_qestion_detail ($cntsid);
 
 /************GET GROUP DETAIL***********/
-$sqlquery = "select voting_name, max_options, welcome_message, voting_type, start_date, end_date, off_message, voting_over_message,active_status,score_type,voting_footer_message from voting_detail where voting_id='" . $cntsid . "' and companyName='" . $compName. "'";
+$sqlquery = "select voting_name, max_options, welcome_message, voting_type, start_date, end_date, off_message, voting_over_message,active_status,score_type,voting_footer_message from voting_detail where voting_id='" . $cntsid . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row = mysql_fetch_row($result)){
 	$cnts_name=$row[0];
@@ -230,12 +226,6 @@ document.question_form.prev.value = header_val;
 								</tr>
 								<tr height="8"><td colspan="3" bgcolor="#D9D9A8"></td></tr>
 
-<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-				
-
 									<tr>
 										<td bgcolor="#D9D9A8" align="right" colspan="2"><input type="button" onclick="voting_question_submit('question_form','<? echo $max_option; ?>')" class="submit1" value="Insert Here!!!" style="background-image:url('images/menu1.gif');"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 										<TD bgcolor="#D9D9A8" align="center">&nbsp;</TD>
@@ -250,7 +240,6 @@ document.question_form.prev.value = header_val;
 	print "<input type =hidden name=action value =\"1\">";
 	print "<input type =hidden name=treeview_cod value =$treeview_cod>";
 	print "<input type =hidden name=smenu value =$smenu>";
-	print "<input type =hidden name=cpName value ='".$compName."'>";
 ?>
 
 								</table>

@@ -1,12 +1,7 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-
-echo "<br>Voting Q V: ".$compName = $_REQUEST["cpName"];
 
 $treeview_cod = $_REQUEST["treeview_cod"];
 $login_form = $_REQUEST["login"];
@@ -25,7 +20,7 @@ if($msg_alert==""){
 }
 
 /************GET Voting DETAIL***********/
-$sqlquery = "select ques_no, question, a, b, c, d, active_status, max_options from voting_questions where id='" . $qstn_id . "' and voting_id='" . $cntsid . "' and companyName='" . $compName. "' order by ques_no asc";
+$sqlquery = "select ques_no, question, a, b, c, d, active_status, max_options from voting_questions where id='" . $qstn_id . "' and voting_id='" . $cntsid . "' and login='" . $login_form . "' order by ques_no asc";
 
 //echo $sqlquery;
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
@@ -41,7 +36,7 @@ while($row = mysql_fetch_row($result)){
 }
 
 /*****************GET voting NAME***************/
-$sqlquery = "select voting_name, max_options,welcome_message,score_type,voting_footer_message from voting_detail where voting_id='" . $cntsid . "' and companyName='" . $compName. "'";
+$sqlquery = "select voting_name, max_options,welcome_message,score_type,voting_footer_message from voting_detail where voting_id='" . $cntsid . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 while($row = mysql_fetch_row($result)){
 	$cnts_name = $row[0];
@@ -68,7 +63,7 @@ if ($ques_no == 1){
 }
 
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -119,25 +114,14 @@ return true
 				<TR height="26">
 					<?if ($question == ""){?>
 						<TD width="454px" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Question View</TD>
-						
-						<TD width="146px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cntsid; ?>&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/Add_Voting_Question_01.gif';" onmouseout="this.src='images/Add_Voting_Question.gif'" src="images/Add_Voting_Question.gif" border="0"/></a></TD>
-						
-						
-						<TD width="118px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question_modify.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&question_id=<? echo $qstn_id; ?>&cnts_id=<? echo $cntsid; ?>&flag=1&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/Edit_Voting_Question_01.gif';" onmouseout="this.src='images/Edit_Voting_Question.gif'" src="images/Edit_Voting_Question.gif" border="0"/></a></TD>
-						
-						
+						<TD width="146px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cntsid; ?>&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/Add_Voting_Question_01.gif';" onmouseout="this.src='images/Add_Voting_Question.gif'" src="images/Add_Voting_Question.gif" border="0"/></a></TD>
+						<TD width="118px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question_modify.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&question_id=<? echo $qstn_id; ?>&cnts_id=<? echo $cntsid; ?>&flag=1&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/Edit_Voting_Question_01.gif';" onmouseout="this.src='images/Edit_Voting_Question.gif'" src="images/Edit_Voting_Question.gif" border="0"/></a></TD>
 						<TD width="130px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are You sure you want to delete this voting question?')==true){document.ques_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DQuestion1.gif';" onmouseout="this.src='images/DQuestion0.gif'" src="images/DQuestion0.gif" border="0"/></a></TD>
-						
 					<?}else{?>
 						<TD width="454px" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Question View</TD>
-						<TD width="125px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cntsid; ?>&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/Add_Voting_Question_01.gif';" onmouseout="this.src='images/Add_Voting_Question.gif'" src="images/Add_Voting_Question.gif" border="0"/></a></TD>
-						
+						<TD width="125px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&cnts_id=<? echo $cntsid; ?>&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/Add_Voting_Question_01.gif';" onmouseout="this.src='images/Add_Voting_Question.gif'" src="images/Add_Voting_Question.gif" border="0"/></a></TD>
 						<!--<TD width="146px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"></TD>-->
-						
-						
-						<TD width="118px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question_modify.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&question_id=<? echo $qstn_id; ?>&cnts_id=<? echo $cntsid; ?>&flag=1&smenu=<? echo $smenu; ?>&cpName=<? echo $compName; ?>"><img onmouseover="this.src='images/Edit_Voting_Question_01.gif';" onmouseout="this.src='images/Edit_Voting_Question.gif'" src="images/Edit_Voting_Question.gif" border="0"/></a></TD>
-						
-						
+						<TD width="118px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="voting_question_modify.php?login=<? echo $login_form; ?>&sess_id=<? echo $sess_id; ?>&question_id=<? echo $qstn_id; ?>&cnts_id=<? echo $cntsid; ?>&flag=1&smenu=<? echo $smenu; ?>"><img onmouseover="this.src='images/Edit_Voting_Question_01.gif';" onmouseout="this.src='images/Edit_Voting_Question.gif'" src="images/Edit_Voting_Question.gif" border="0"/></a></TD>
 						<TD width="130px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are You sure you want to delete this voting question?')==true){document.ques_view.submit();}else{void('null');}"><img onmouseover="this.src='images/Delete_Voting_Question_01.gif';" onmouseout="this.src='images/Delete_Voting_Question.gif'" src="images/Delete_Voting_Question.gif" border="0"/></a></TD>
 					<?}?>
 				</TR>
@@ -211,7 +195,6 @@ return true
 	print "<input type =hidden name=action value =\"3\">";
 	print "<input type =hidden name=treeview_cod value =$treeview_cod>";
 	print "<input type =hidden name=smenu value =$smenu>";
-	print "<input type =hidden name=cpName value ='". $compName."'>";
 ?>
 							</table>
 							</td>

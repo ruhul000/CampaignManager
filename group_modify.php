@@ -1,7 +1,4 @@
 <?php
-
-ob_start();
-
 require("gui_common.php");
 require("template.php");
 
@@ -11,10 +8,8 @@ $grp_id = $_REQUEST["grp_id"];
 $msg_alert = $_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-echo $compName = $_REQUEST["cpName"];
 
-
-$sqlquery = "select group_name, description, active_status from group_detail where group_id='" . $grp_id . "' and companyName='" . $compName. "'";
+$sqlquery = "select group_name, description, active_status from group_detail where group_id='" . $grp_id . "' and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 while($row = mysql_fetch_row($result)){
@@ -29,7 +24,7 @@ if($msg_alert==""){
     $msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -110,12 +105,6 @@ if(!$grp_id){
 
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
 
-
-			    <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-
                             <tr height="16" bgcolor="#D9D9A8">
                                 <td align="center" class="WorkGreen" colspan="3"><input type="button" class="submit1" onclick="group_submit('group_modify');" value="Modify Here!!!" style="background-image:url('images/menu1.gif');" tabindex="33"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             </tr>
@@ -128,7 +117,6 @@ if(!$grp_id){
     print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
     print "<input type=\"hidden\" name=\"grp_id\" value=" . $grp_id . ">";
     print "<input type=\"hidden\" name=\"grp_name\" value=" . $grp_name . ">";
-     print "<input type=\"hidden\" name=\"cpName\" value='" . $compName. "'>";
 ?>
                         </table>
                     </td>

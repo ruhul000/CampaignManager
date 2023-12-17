@@ -1,13 +1,8 @@
 <?php
-
-ob_start();
-
 require("template.php");
 require("gui_common.php");
 //header("Content-type: text/html; charset=windows-874");
 
-
-$compName=$_REQUEST["cpName"];
 $login_form=$_REQUEST["login"];
 $msg_alert=$_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
@@ -17,7 +12,7 @@ $sms_id = $_REQUEST["sms_id"];
 $sms_type=(!$_REQUEST["sms_type"])?$_REQUEST["sms_mode_tmp"]:$_REQUEST["sms_type"];
 
 if ($sms_id){
-	$sqlquery = "select message,footer_url,sms_mode,language from rules_detail where sms_id='" . $sms_id . "' and  archive!=1 order by sms_id";
+	$sqlquery = "select message,footer_url,sms_mode,language from rules_detail where sms_id='" . $sms_id . "' and  archive!=1 and login='" . $login_form . "' order by sms_id";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	while($row = mysql_fetch_row($result)){
@@ -40,22 +35,24 @@ if($msg_alert==""){
 	$msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
 workareatop_new();
 ?>
 
-<form name="bulksms_create" id="bulksms_create" action="bulksms_update.php" method="post">
-	<table align="left" border="0" cellspacing="1" cellpadding="0" width="748px" bgcolor="#525200">
+<form name="bulksms_create" id="bulksms_create"
+	action="bulksms_update.php" method="post">
+<table align="left" border="0" cellspacing="1" cellpadding="0"
+	width="748px" bgcolor="#525200">
 	<tr>
 		<td>
-		<table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
+		<table align="center" border="0" cellspacing="0" cellpadding="0"
+			width="748px" bgcolor="#f4f4e4">
 			<TR height="26">
-				<TD align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;SMS Broadcast
-				</TD>
+				<TD align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+					src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;SMS Broadcast</TD>
 				<TD class="WorkWht" background="images/trgt_hdr1.gif" align="right"></TD>
 			</TR>
 			<tr>
@@ -69,21 +66,22 @@ workareatop_new();
 					</tr>
 
 					<?if (strlen($msg_alert) > 0){?>
-						<tr height="16px" bgcolor="#D9D9A8">
+					<tr height="16px" bgcolor="#D9D9A8">
 						<TD colspan="3" align="center" class="bold_red_text">&nbsp;&nbsp;<?echo $msg_alert; ?></TD>
-						</tr>
-						<tr height="8px" bgcolor="#D9D9A8">
-							<td colspan="3"></td>
-						</tr>
+					</tr>
+					<tr height="8px" bgcolor="#D9D9A8">
+						<td colspan="3"></td>
+					</tr>
 					<?}?>
 
 					<tr height="16px" bgcolor="#D9D9A8">
 
-						<td align="right" valign="top" class="WorkGreen">Choose SMS Type&nbsp;:&nbsp;</TD>
-						<td align="left" valign="top" bgcolor="#f4f4e4">Text Base&nbsp;:&nbsp;
-						<input type="radio" name="sms_type" value="1"
+						<td align="right" valign="top" class="WorkGreen">Choose SMS
+						Type&nbsp;:&nbsp;</TD>
+						<td align="left" valign="top" bgcolor="#f4f4e4">Text
+						Base&nbsp;:&nbsp;<input type="radio" name="sms_type" value="1"
 						<?if($sms_type==1||!$sms_type) echo "checked=\"checked\""; ?>
-					onclick="document.getElementById('txtsms').style.display='inline';document.getElementById('wapsms').style.display='none';"
+							onclick="document.getElementById('txtsms').style.display='inline';document.getElementById('wapsms').style.display='none';"
 							onmouseover="showIT('Text based message')" onmouseout="showIT()" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						Wap Push&nbsp;:&nbsp;<input type="radio" name="sms_type" value="2"
 						<?if($sms_type==2) echo "checked=\"checked\""; ?>
@@ -208,11 +206,6 @@ workareatop_new();
 						</div>
 						</td>
 					</tr>
-					
-		<!-- Hidden Company name field -->
-                            		<td align="left" valign="top" class="WorkGreen">
-                                   		 <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            		</TD>
 
 					<tr height="16" bgcolor="#D9D9A8">
 						<td align="center" class="WorkGreen" colspan="3"><input
@@ -231,7 +224,7 @@ workareatop_new();
 					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
 					print "<input type=\"hidden\" name=\"sms_id\" value=" . $sms_id . ">";
 					print "<input type=\"hidden\" name=\"sms_mode_tmp\" value=" . $sms_mode . ">";
-    					print "<input type=\"hidden\" name=\"companyName\" value='" . $compName . "'>";
+
 
 					?>
 				</table>

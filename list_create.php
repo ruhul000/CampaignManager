@@ -1,18 +1,16 @@
 <?php
-
-ob_start();
 require("template.php");
 require("gui_common.php");
 //header("Content-type: text/html; charset=windows-874");
 
-echo "hello: ".$compName = $_REQUEST["cpName"];
+
 $login_form=$_REQUEST["login"];
 $msg_alert=$_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
 $treeview_cod = $_REQUEST["treeview_cod"];
 
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 
 $schlr_name = $_REQUEST["schlr_name"];
 $target_id = $_REQUEST["target_id"];
@@ -26,7 +24,7 @@ $rule_id = $_REQUEST["rule_id"];
 $msgln = $_REQUEST["msgln"];
 $sms_type = ($_REQUEST["sms_type"]=="")?"1":$_REQUEST["sms_type"];
 
-$sqlquery = "select target_id, target_name from target_detail where companyName='" . $compName . "'";
+$sqlquery = "select target_id, target_name from target_detail where login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 $cnt=0;
@@ -37,7 +35,7 @@ while($row = mysql_fetch_row($result)){
 }
 $maxtg=count($target_ids);
 
-$sqlquery = "select sms_id,message,sms_mode,footer_url,language from rules_detail where archive!=1 and companyName='" . $compName . "'";
+$sqlquery = "select sms_id,message,sms_mode,footer_url,language from rules_detail where archive!=1 and login='" . $login_form . "'";
 $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 $cbosibling="";
@@ -427,10 +425,7 @@ if(!$maxtg or !$maxsms){
 							</tr>
 							<tr height="8px" bgcolor="#D9D9A8"><td colspan="4"></td></tr>
 
- 			<!-- Hidden Company name field -->
-                            				<td align="left" valign="top" class="WorkGreen">
-                                   			    <input type="hidden" name="cpName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            				</TD>
+
 
 							<tr height="16" bgcolor="#D9D9A8">
 								<td align="center" class="WorkGreen" colspan="4"><input type="button" class="submit1" value="Create Here!!!" onclick="list_submit('list_create');" style="background-image:url('images/menu1.gif');" tabindex="33"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -442,9 +437,6 @@ if(!$maxtg or !$maxsms){
 	print "<input type=\"hidden\" name=\"action\" value=\"1\">";
 	print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
 	print "<input type=\"hidden\" name=\"locdt\" value =" . $locdt . ">";
-	print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
-	print "<input type=\"hidden\" name=\"locdt\" value =" . $locdt . ">";
-	print "<input type=\"hidden\" name=\"cpName\" value ='" . $compName . "'>";
 
 ?>
 						</table>

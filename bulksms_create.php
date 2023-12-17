@@ -1,12 +1,7 @@
 <?php
-ob_start();
-
 require("template.php");
 require("gui_common.php");
 
-
-echo "---".$compName=$_REQUEST["cpName"];
-//die();
 $login_form=$_REQUEST["login"];
 $msg_alert=$_REQUEST["msg_alert"];
 $sess_id=$_REQUEST["sess_id"];
@@ -18,8 +13,6 @@ $sms_msg=$_REQUEST["sms_msg"];
 $sms_footer=$_REQUEST["sms_footer"];
 $wap_url=$_REQUEST["wap_url"];
 $wap_title=$_REQUEST["wap_title"];
-
-
 
 if($msg_alert==""){
 	$msg="Bulk SMS Creation Choose";
@@ -195,12 +188,6 @@ workareatop_new();
 						</div>
 						</td>
 					</tr>
-					
-					
-			<!-- Hidden Company name field -->
-                            		<td align="left" valign="top" class="WorkGreen">
-                                   		 <input type="hidden" name="cpName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            		</TD>
 
 					<tr height="16" bgcolor="#D9D9A8">
 						<td align="center" class="WorkGreen" colspan="3"><input
@@ -217,7 +204,6 @@ workareatop_new();
 					print "<input type=\"hidden\" name=\"page\" value=\"1\">";
 					print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
 					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
-					print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
 					?>
 				</table>
 				</td>

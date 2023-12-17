@@ -1,12 +1,4 @@
-<?php	
-
-ob_start();
-
-require("gui_common.php");
-
-global $compName;
-echo "cpname : ".$compName=$_REQUEST["cpName"];
-//die();
+<?php	require("gui_common.php");
 
 $page = $_REQUEST["page"];
 $treeview_cod = $_REQUEST["treeview_cod"];
@@ -22,11 +14,11 @@ $wap_title=$_REQUEST["wap_title"];
 $wap_url=$_REQUEST["wap_url"];
 $lang_sms=$_REQUEST["lang_sms"];
 
-$baseurl="login=" . $login_form . "&sess_id=" . $sess_id ."&smenu=" . $smenu . "&treeview_cod=" . $treeview_cod  . "&cpName=" . $compName;
+$baseurl="login=" . $login_form . "&sess_id=" . $sess_id ."&smenu=" . $smenu . "&treeview_cod=" . $treeview_cod ;
 if($sms_type==1){
-	$chkurl="&sms_msg=" . $sms_msg . "&sms_footer=" . $sms_footer."&lang_sms=".$lang_sms . "&cpName=" . $compName;
+	$chkurl="&sms_msg=" . $sms_msg . "&sms_footer=" . $sms_footer."&lang_sms=".$lang_sms;
 }else if($sms_type==2){
-	$chkurl="&wap_url=" . $wap_url . "&wap_title=" . $wap_title . "&cpName=" . $compName;
+	$chkurl="&wap_url=" . $wap_url . "&wap_title=" . $wap_title;
 }
 
 if ($page==1){
@@ -44,36 +36,36 @@ if ($page == 3){
     	$msg_alert = "SMS Message Successfully Deleted";
     	$next_id=delete_sms($sms_id);
     }else{
-		$msg_alert = "SMS Message exist in Schedular. You cannot delete it!";
+		$msg_alert = "SMS Message exist in Schedular.You cannot delete it!";
 		$next_id=$sms_id;
 		//header($loc . "&msg_alert=" . $msg_alert);
 		//die();
     }
 
 
-    header($strurl . $baseurl . "&sms_id=" . $next_id . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+    header($strurl . $baseurl . "&sms_id=" . $next_id . "&msg_alert=" . $msg_alert);
 	die();
 }
 
 if (!$sms_type){
     $msg_alert = "Please Choose SMS Message Type!";
-    header($loc . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+    header($loc . "&msg_alert=" . $msg_alert);
     die();
 }else if ($sms_type==1 && !$lang_sms){
     $msg_alert = "Please Select Language Type Of SMS Message!";
-    header($loc . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+    header($loc . "&msg_alert=" . $msg_alert);
     die();
 }else if ($sms_type==1 && !$sms_msg){
     $msg_alert = "Please Enter Text SMS Message!";
-    header($loc . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+    header($loc . "&msg_alert=" . $msg_alert);
     die();
 }else if ($sms_type==2 && !$wap_title){
     $msg_alert = "Please Enter WAP Push SMS Title!";
-    header($loc . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+    header($loc . "&msg_alert=" . $msg_alert);
     die();
 }else if ($sms_type==2 && !$wap_url){
     $msg_alert = "Please Enter WAP Push SMS Url!";
-    header($loc . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+    header($loc . "&msg_alert=" . $msg_alert);
     die();
 }
 
@@ -82,11 +74,8 @@ if ($page==1){
 
 	if($sms_type==1){
 		if($lang_sms == 'Thai'){
-		//echo "Thai: ".$compName;
 			$sms_id=insert_sms($sms_msg,$sms_footer,'3');// 3 FOR OTHER LANGUAGE
 		}else{
-		//echo "English: ".$compName;
-		//die();
 			$sms_id=insert_sms($sms_msg,$sms_footer,$sms_type);
 		}
 
@@ -96,7 +85,7 @@ if ($page==1){
 	}
 
 	$msg_alert = "Message Successfully Created";
-	header($strurl . $baseurl . "&msg_alert=" . $msg_alert . "&cpName=" . $compName);
+	header($strurl . $baseurl . "&msg_alert=" . $msg_alert);
 	die();
 }else if ($page==2){
 
@@ -113,13 +102,13 @@ if ($page==1){
 	}
 
 	$msg_alert = "Message Successfully Updated";
-    header($loc . "&sms_id=" . $sms_id . "&msg_alert=" . $msg_alert. "&cpName=" . $compName);
+    header($loc . "&sms_id=" . $sms_id . "&msg_alert=" . $msg_alert);
 	die();
 }
 
 function insert_sms($strmsg1,$strmsg2,$mode)
 {
-	global $login_form,$lang_sms,$compName;
+	global $login_form,$lang_sms;
 
 	$strmsg1 = str_replace("'","''",$strmsg1);
 	$strmsg2 = str_replace("'","''",$strmsg2);
@@ -131,7 +120,7 @@ function insert_sms($strmsg1,$strmsg2,$mode)
 
 
 
-	$sqlquery = "insert into rules_detail(message,footer_url,sms_mode,login,language,companyName) values('" . $strmsg1 . "','" . $strmsg2 . "','" . $mode . "', '" . $login_form . "','".$lang_sms."','".$compName."')";
+	$sqlquery = "insert into rules_detail(message,footer_url,sms_mode,login,language) values('" . $strmsg1 . "','" . $strmsg2 . "','" . $mode . "', '" . $login_form . "','".$lang_sms."')";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	return mysql_insert_id();
 }
@@ -139,9 +128,8 @@ function insert_sms($strmsg1,$strmsg2,$mode)
 
 function modify_sms($strmsg1,$strmsg2,$mode,$sms_id)
 {
-	global $login_form,$lang_sms,$compName;
-	echo "mod: ".$compName;
-	
+	global $login_form,$lang_sms;
+
 	$strmsg1 = str_replace("'","''",$strmsg1);
 	$strmsg2 = str_replace("'","''",$strmsg2);
 	if($lang_sms=='Thai'){
@@ -149,18 +137,19 @@ function modify_sms($strmsg1,$strmsg2,$mode,$sms_id)
 		$strmsg2 = strToHex($strmsg2);
 	}
 
-	$sqlquery = "update rules_detail set message='" . $strmsg1 . "',footer_url='" . $strmsg2 . "',sms_mode='" . $mode . "',language='".$lang_sms."' where sms_id='" . $sms_id . "' and companyName='" . $compName . "'";
+	$sqlquery = "update rules_detail set message='" . $strmsg1 . "',footer_url='" . $strmsg2 . "',sms_mode='" . $mode . "',language='".$lang_sms."' where sms_id='" . $sms_id . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 }
 
 
 function delete_sms($sms_id)
 {
-    global $login_form,$compName;
-    $sqlquery = "delete from rules_detail where sms_id='" . $sms_id . "'";
+    global $login_form;
+
+    $sqlquery = "delete from rules_detail where sms_id='" . $sms_id . "' and login='" . $login_form . "'";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
-    $sqlquery = "select sms_id from rules_detail where companyName='" . $compName . "' order by sms_id desc limit 1";
+    $sqlquery = "select sms_id from rules_detail where login='" . $login_form . "' order by sms_id desc limit 1";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	$next_avail=0;

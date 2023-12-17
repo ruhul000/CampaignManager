@@ -1,6 +1,4 @@
 <?php
-ob_start();
-
 require("template.php");
 require("gui_common.php");
 
@@ -8,12 +6,12 @@ $login_form = $_REQUEST["login"];
 $smenu=$_REQUEST["smenu"];
 $sess_id=$_REQUEST["sess_id"];
 $msg_alert = $_REQUEST["msg_alert"];
+
 $grp_id = $_REQUEST["grp_id"];
 $sgrp_id = $_REQUEST["sgrp_id"];
-echo "grpV: ".$compName = $_REQUEST["cpName"];
 
 if ($grp_id){
-    $sqlquery = "select group_name, description, active_status from group_detail where group_id='" . $grp_id . "' and companyName='" . $compName . "'";
+    $sqlquery = "select group_name, description, active_status from group_detail where group_id='" . $grp_id . "' and login='" . $login_form . "'";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 
@@ -62,14 +60,9 @@ if(!$grp_name){
             <table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
                 <tr height="26">
                     <td width="479px" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;Group Management</TD>
-                    
-                    <td width="102px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="subgroup_create.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&grp_name=<? echo $grp_name ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&cpName=<? echo  $compName ?>"><img onmouseover="this.src='images/ASGroup1.gif';" onmouseout="this.src='images/ASGroup0.gif'" src="images/ASGroup0.gif" border="0"/></a></TD>
-                    
-                    
-                    <td width="76px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_modify.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&cpName=<? echo  $compName ?>"><img onmouseover="this.src='images/EGroup1.gif';" onmouseout="this.src='images/EGroup0.gif'" src="images/EGroup0.gif" border="0"/></a></TD>
-                   
+                    <td width="102px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="subgroup_create.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&grp_name=<? echo $grp_name ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>"><img onmouseover="this.src='images/ASGroup1.gif';" onmouseout="this.src='images/ASGroup0.gif'" src="images/ASGroup0.gif" border="0"/></a></TD>
+                    <td width="76px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="group_modify.php?login=<? echo $login_form ?>&grp_id=<? echo $grp_id ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>"><img onmouseover="this.src='images/EGroup1.gif';" onmouseout="this.src='images/EGroup0.gif'" src="images/EGroup0.gif" border="0"/></a></TD>
                     <td width="91px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are you sure you want to delete <? echo $grp_name; ?> Group and its Sub Groups?')==true){document.group_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DGroup1.gif';" onmouseout="this.src='images/DGroup0.gif'" src="images/DGroup0.gif" border="0"/></a></TD>
-                    
                 </tr>
                  <tr>
                     <td colspan="4">
@@ -108,11 +101,6 @@ if(!$grp_name){
                                 <td>&nbsp;</td>
                             </tr>
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
-                            
-                            <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
 
 <?
     print "<input type=\"hidden\" name=\"login\" value=" . $login_form . ">";
@@ -122,7 +110,6 @@ if(!$grp_name){
     print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
     print "<input type=\"hidden\" name=\"grp_id\" value=" . $grp_id . ">";
     print "<input type=\"hidden\" name=\"sgrp_id\" value=" . $sgrp_id . ">";
-    print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
 ?>
                         </table>
                     </td>

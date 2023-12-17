@@ -1,8 +1,4 @@
 <?php
-
-ob_start();
-
-require("config.php");
 require("template.php");
 require("gui_common.php");
 
@@ -12,11 +8,9 @@ $treeview_cod = $_REQUEST["treeview_cod"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
 $target_id = $_REQUEST["target_id"];
-$compName = $_REQUEST["cpName"];
 
 if ($target_id) {
-	$sqlquery = "select target_name,group_id,subgroup_id,file_path,target_status,daily_new_target,cron_start_date from target_detail where archive!=1 and target_id='" . $target_id . "' and companyName='" . $compName . "'";
-	
+	$sqlquery = "select target_name,group_id,subgroup_id,file_path,target_status,daily_new_target,cron_start_date from target_detail where archive!=1 and target_id='" . $target_id . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
 	while($row = mysql_fetch_row($result)){
@@ -29,18 +23,18 @@ if ($target_id) {
 		$cron_start_date=$row[6];
 	}
 }
-$temp=explode(DIR_SEPERATOR,getfolder($grp_id,$sgrp_id));
+$temp=explode('/',getfolder($grp_id,$sgrp_id));
 $grp_name=$temp[0];
 $sgrp_name=$temp[1];
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
 workareatop_new(); 					//workareatop();
 
 if(!$target_name){
-    $msg_alert = "Sorry!!! We Have Not Found Any Target Against Your Request.Please Create Target";
+    $msg_alert = "Sorry!!! We Have Not Found Any Schedule Against Your Request.Please Create Schedule";
 ?>
     <table align="left" border="0" cellspacing="1" cellpadding="0" width="748px" bgcolor="#525200">
         <tr><td>
@@ -90,7 +84,7 @@ if(!$target_name){
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
 
 
- 				<tr height="16px" bgcolor="#D9D9A8">
+ 							<tr height="16px" bgcolor="#D9D9A8">
                                 <td  align="right" valign="top" class="WorkGreen">Group Name&nbsp;:&nbsp;</td>
                                 <td align="left" valign="top" bgcolor="#f4f4e4"><select name="grp_id" class="input" disabled="disabled"><option value="">Select Group Name</option><option value="<? echo $grp_id; ?>" selected="selected"><? echo $grp_name; ?></option></select></td>
 								<td>&nbsp;</td>
@@ -107,7 +101,7 @@ if(!$target_name){
 
                             <tr height="16px" bgcolor="#D9D9A8">
                                 <td  align="right" valign="top" class="WorkGreen">Uploaded MSISDN&nbsp;:&nbsp;</td>
-                                <td align="left" valign="top" bgcolor="#f4f4e4"><? echo substr($path,strripos($path,DIR_SEPERATOR)+1); ?></td>
+                                <td align="left" valign="top" bgcolor="#f4f4e4"><? echo substr($path,strripos($path,'/')+1); ?></td>
 								<td>&nbsp;</td>
                             </tr>
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>

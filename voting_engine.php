@@ -1,11 +1,7 @@
 <?php
-
-ob_start();
 require("gui_common.php");
 require("template.php");
 
-
-echo "<br>Voting engine: ".$compName = $_REQUEST["cpName"];
 $action=$_REQUEST["action"];
 $treeview_cod=$_REQUEST["treeview_cod"];
 $login_form=$_REQUEST["login"];
@@ -54,7 +50,7 @@ $question_type=$_REQUEST["questiontype"];
 
 
 $checkscore=$_REQUEST["checkscore"];
-$locdt=date('m/d/Y/H/i/s', time());
+$locdt=date('m/d/Y/H/i/s', mktime());
 $msg_alert=$_REQUEST["msg_alert"];
 
 if($msg_alert==""){
@@ -756,16 +752,7 @@ function state_Change_Key()	{
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>
-<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-					
-					
-					
-					
-					
-					
+
 					<tr height="16" bgcolor="#D9D9A8">
 						<td align="center" class="WorkGreen" colspan="3"><input
 							type="button" onclick="voting_submit('voting_form','1')"
@@ -778,11 +765,10 @@ function state_Change_Key()	{
 					<?
 					print "<input type=\"hidden\" name=\"login\" value=" . $login_form . ">";
 					print "<input type=\"hidden\" name=\"sess_id\" value=" . $sess_id . ">";
-					print "<input type=\"hidden\" name=\"action\" value=\"1\">";
-					print "<input type=\"hidden\" name=\"locdt\" value =" . $locdt . ">";
-					print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
-					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
-					print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
+	print "<input type=\"hidden\" name=\"action\" value=\"1\">";
+	print "<input type=\"hidden\" name=\"locdt\" value =" . $locdt . ">";
+	print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
+	print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
 
 ?>
 				</table>

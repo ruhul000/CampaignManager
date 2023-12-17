@@ -1,9 +1,4 @@
 <?php
-
-ob_start();
-
-
-require("config.php");
 require("gui_common.php");
 require("template.php");
 header("Pragma: no-cache");
@@ -14,8 +9,6 @@ header( "Cache-Control: post-check=0, pre-check=0", FALSE);
 header( "Pragma: no-cache" );
 
 ClearStatCache();
-
-//die();
 ?>
 
 <script type="text/javascript">
@@ -38,8 +31,6 @@ $trgt_name = $_REQUEST["trgt_name"];
 $trgt_selctn = $_REQUEST["trgt_selctn"];
 $grp_id = $_REQUEST["cbo_group"];
 $sgrp_id = $_REQUEST["cbo_sgroup"];
-echo "cp: ".$compName = $_REQUEST["cpName"];
- 
 
 $host_ip = $_REQUEST["host_ip"];
 $db_name = $_REQUEST["db_name"];
@@ -67,7 +58,7 @@ if($fieldValue !=0){
 
 }
 if ($page>=4){
-	$sqlquery = "select file_path from target_detail where archive!=1 and  target_name='" . $trgt_name . "' and companyName='" . $compName. "'";
+	$sqlquery = "select file_path from target_detail where archive!=1 and  target_name='" . $trgt_name . "' and login='" . $login_form . "'";
 	$result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 	while($row = mysql_fetch_row($result)){
 		$target_path=$row[0];
@@ -75,7 +66,7 @@ if ($page>=4){
 }
 
 
-$sqlquery="select grp.group_id,grp.group_name,sgrp.subgroup_id,sgrp.subgroup_name from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.active_status=sgrp.active_status and grp.active_status=1  and grp.companyName='" . $compName . "' order by grp.group_id";
+$sqlquery="select grp.group_id,grp.group_name,sgrp.subgroup_id,sgrp.subgroup_name from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.active_status=sgrp.active_status and grp.active_status=1  and grp.login='" . $login_form . "' order by grp.group_id";
 $result = mysql_query($sqlquery,$conn) or die('mysql error:' . mysql_error());
 
 $cnt=0;$cnt1=0;
@@ -124,12 +115,12 @@ if($msg_alert==""){
 	$msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
 if($page>=2){
-	include("connection".DIR_SEPERATOR."$login_form".DIR_SEPERATOR."connection.php");
+	include("connection/$login_form/connection.php");
 	$table_desc=valid_db("table detail",$conn_mysql);
 	$table_arr=explode(",",$table_desc);
 
@@ -359,7 +350,8 @@ function make_locdt(dtobj,dtstr){
 
 
 
-<form name="target_create" id="target_create" action="target_update.php" enctype="multipart/form-data" method="post">
+<form name="target_create" id="target_create" action="target_update.php"
+	enctype="multipart/form-data" method="post">
 <table align="left" border="0" cellspacing="1" cellpadding="0"
 	width="748px" bgcolor="#525200">
 	<tr>
@@ -388,8 +380,7 @@ function make_locdt(dtobj,dtstr){
 					<tr height="8px" bgcolor="#D9D9A8">
 						<td colspan="3"></td>
 					</tr>
-					<?}
-					?>
+					<?}?>
 					<tr height="16px" bgcolor="#D9D9A8">
 						<td align="right" valign="top" class="WorkGreen">Target
 						Name&nbsp;:&nbsp;</TD>
@@ -408,7 +399,7 @@ function make_locdt(dtobj,dtstr){
 						Criteria&nbsp;:&nbsp;</TD>
 						<td align="left" valign="top" class="WorkGreen"><select
 							name="trgt_selctn" class="input"
-							onchange="var objimptxt=document.getElementById('imptxt').style;objimpdb=document.getElementById('impdb').style; if(this.value==1){objimptxt.display='inline';objimpdb.display='none';}else if(this.value==2){objimptxt.display='none';objimpdb.display='inline';}else{objimptxt.display='none';objimpdb.display='none';}">
+							onchange="document.getElementById('page').value=1;var objimptxt=document.getElementById('imptxt').style,objimpdb=document.getElementById('impdb').style; if(this.value==1){objimptxt.display='inline';objimpdb.display='none';}else if(this.value==2){objimptxt.display='none';objimpdb.display='inline';}else{objimptxt.display='none';objimpdb.display='none';}">
 							<option value="">Select Criteria</option>
 							<option value="1"
 							<? if($trgt_selctn==1){echo "selected=\"selected\"";} ?>>Ready
@@ -475,11 +466,6 @@ function make_locdt(dtobj,dtstr){
 							<tr height="8">
 								<td colspan="3" bgcolor="#D9D9A8"></td>
 							</tr>
-							
-		<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
 
 							<tr height="16" bgcolor="#D9D9A8">
 								<td align="center" class="WorkGreen" colspan="3"><input
@@ -499,8 +485,6 @@ function make_locdt(dtobj,dtstr){
 					<tr height="1px" bgcolor="#D9D9A8">
 						<td colspan="3">
 						<div id="impdb"
-						
-						
 						<? if($trgt_selctn==2){echo "style=\"display:inline\"";}else{echo "style=\"display:none\"";} ?>>
 						<table border="0" cellspacing="0" cellpadding="0" width="748px">
 							<tr height="1px" bgcolor="#D9D9A8">
@@ -535,7 +519,7 @@ function make_locdt(dtobj,dtstr){
 									value='<? echo $db_pwd; ?>' size='20' maxlength='50'
 									class='input' <? if($dbsatus) echo "readonly='readonly'"; ?> />&nbsp;&nbsp;&nbsp;&nbsp;
 									<? if(!$dbsatus){?><a href="#"
-									onclick="dbase_conn('target_create');">Make&nbsp;Connection</a><?}?></td>
+									onclick="dbase_conn('target_create');">Make Connection</a><?}?></td>
 							
 							
 							<tr height="8px" bgcolor="#D9D9A8">
@@ -562,7 +546,7 @@ function make_locdt(dtobj,dtstr){
 
 							<tr height="16" bgcolor="#D9D9A8">
 								<td align="center" class="WorkGreen" colspan="3"><input
-									type="button" onclick="document.getElementById('page').value='2';target_submit('target_create')"
+									type="button" onclick="target_submit('target_create')"
 									class="submit1" value="Open DBase!!!"
 									style="background-image: url('images/menu1.gif');"
 									id="makeconn" style="display:'none'" tabindex="33" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -571,7 +555,7 @@ function make_locdt(dtobj,dtstr){
 								<td colspan="3"></td>
 							</tr>
 
-							<?if($page>=2){?>
+							<? if($page>=2){?>
 
 							<tr height="16" bgcolor="#D9D9A8">
 								<td align="right" valign="top" class="WorkGreen">DB
@@ -681,6 +665,7 @@ function make_locdt(dtobj,dtstr){
 										<td colspan="3"></td>
 									</tr>
 
+
 									<tr height="8px" bgcolor="#D9D9A8">
 										<td colspan="3"></td>
 									</tr>
@@ -705,7 +690,7 @@ function make_locdt(dtobj,dtstr){
 							</tr>
 
 							<tr height="8px" bgcolor="#D9D9A8">
-								<td colspan="3"><input type="hidden" name="target_state" id="target_state"
+								<td colspan="3"><input type="hidden" name="target_state"
 									value="<? echo $target_state; ?>"></td>
 							</tr>
 
@@ -736,7 +721,7 @@ function make_locdt(dtobj,dtstr){
 							<? echo $trgt_name; ?> MSISDN zip file</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<script type="text/javascript">
 // Popup window code
-newPopup('<? echo "http://".$_SERVER['SERVER_NAME'].":".PORT."/".APP_CONTEXT."/list_create_popup.php?login=".$login_form."&sess_id=".$sess_id."&smenu=".$smenu ?>');
+newPopup('<? echo "http://".$_SERVER['SERVER_NAME'].":81/campaign/list_create_popup.php?login=".$login_form."&sess_id=".$sess_id."&smenu=".$smenu ?>');
 </script>
 					</tr>
 					<tr height="8px" bgcolor="#D9D9A8">
@@ -746,11 +731,10 @@ newPopup('<? echo "http://".$_SERVER['SERVER_NAME'].":".PORT."/".APP_CONTEXT."/l
 					<?
 					print "<input type=\"hidden\" name=\"login\" value=" . $login_form . ">";
 					print "<input type=\"hidden\" name=\"sess_id\" value=" . $sess_id . ">";
-					print "<input type=\"hidden\" name=\"page\" id=\"page\" value=\"1\">";
+					print "<input type=\"hidden\" name=\"page\" value=\"1\">";
 					print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
 					print "<input type=\"hidden\" name=\"table_desc\" value=" . $table_desc . ">";
 					print "<input type=\"hidden\" name=\"msg_alert\" value=" . $msg_alert . ">";
-					print "<input type=\"hidden\" name=\"cpName\" value='" . $compName . "'>";
 					?>
 
 				</table>
@@ -777,7 +761,7 @@ newPopup('<? echo "http://".$_SERVER['SERVER_NAME'].":".PORT."/".APP_CONTEXT."/l
 					if($pop==1){?>
 <script type="text/javascript">
 // Popup window
-newPopup('<? echo "http://".$_SERVER['SERVER_NAME']."/".APP_CONTEXT."/list_create_popup.php?login=".$login_form."&sess_id=".$sess_id."&smenu=".$smenu ?>');
+newPopup('<? echo "http://".$_SERVER['SERVER_NAME']."/campaign/list_create_popup.php?login=".$login_form."&sess_id=".$sess_id."&smenu=".$smenu ?>');
 </script>
 
 					<?}	?>

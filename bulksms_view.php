@@ -1,12 +1,7 @@
 <?php
-
-ob_start();
-
 require("template.php");
 require("gui_common.php");
 //header("Content-type: text/html; charset=windows-874");
-
-echo "---: ".$compName=$_REQUEST["cpName"];
 
 $login_form=$_REQUEST["login"];
 $msg_alert=$_REQUEST["msg_alert"];
@@ -16,7 +11,7 @@ $treeview_cod = $_REQUEST["treeview_cod"];
 $sms_id = $_REQUEST["sms_id"];
 
 if ($sms_id){
-    $sqlquery = "select message,footer_url,sms_mode,language from rules_detail where sms_id='" . $sms_id . "' and  archive!=1 and companyName='" . $compName . "' order by sms_id";
+    $sqlquery = "select message,footer_url,sms_mode,language from rules_detail where sms_id='" . $sms_id . "' and  archive!=1 and login='" . $login_form . "' order by sms_id";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
     while($row = mysql_fetch_row($result)){
@@ -41,7 +36,7 @@ if($msg_alert==""){
     $msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -76,9 +71,7 @@ if(!$message){
             <table align="center" border="0" cellspacing="0" cellpadding="0" width="748px" bgcolor="#f4f4e4">
                 <TR height="28">
                     <TD width="598px" align="left" class="WorkWht" background="images/trgt_hdr1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/3.png" border="0">&nbsp;&nbsp;&nbsp;SMS Broadcast</TD>
-                    <td width="68px" align="right" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="bulksms_modify.php?login=<? echo $login_form ?>&sms_id=<? echo $sms_id ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&sms_type=<? echo $sms_mode ?>&cpName=<? echo $compName ?>"><img onmouseover="this.src='images/ESMS1.gif';" onmouseout="this.src='images/ESMS0.gif'" src="images/ESMS0.gif" border="0"/></a></TD>
-                    
-                    
+                    <td width="68px" align="right" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="bulksms_modify.php?login=<? echo $login_form ?>&sms_id=<? echo $sms_id ?>&sess_id=<? echo $sess_id ?>&smenu=<? echo $smenu ?>&sms_type=<? echo $sms_mode ?>"><img onmouseover="this.src='images/ESMS1.gif';" onmouseout="this.src='images/ESMS0.gif'" src="images/ESMS0.gif" border="0"/></a></TD>
                     <td width="82px" align="center" background="images/trgt_hdr1.gif" class="WorkWht"><a class="WorkWht" href="javascript:if (confirm('Are you sure you want to delete this SMS?')==true){document.bulksms_view.submit();}else{void('null');}"><img onmouseover="this.src='images/DSMS1.gif';" onmouseout="this.src='images/DSMS0.gif'" src="images/DSMS0.gif" border="0"/></a></TD>
                 </TR>
                 <tr>
@@ -126,10 +119,7 @@ if(!$message){
                                 <td>&nbsp;</td>
                             </tr>
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
-   <!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
+
 <?
     print "<input type=\"hidden\" name=\"login\" value=" . $login_form . ">";
     print "<input type=\"hidden\" name=\"sess_id\" value=" . $sess_id . ">";
@@ -137,7 +127,6 @@ if(!$message){
     print "<input type=\"hidden\" name=\"treeview_cod\" value =" . $treeview_cod . ">";
     print "<input type=\"hidden\" name=\"smenu\" value=" . $smenu . ">";
     print "<input type=\"hidden\" name=\"sms_id\" value=" . $sms_id . ">";
-    print "<input type=\"hidden\" name=\"companyName\" value='" . $compName . "'>";
 ?>
                         </table>
                     </td>

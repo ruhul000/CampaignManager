@@ -12,11 +12,9 @@ $sgrp_id = $_REQUEST["sgrp_id"];
 $sgrp_desc = $_REQUEST["sgrp_desc"];
 $sess_id=$_REQUEST["sess_id"];
 $smenu=$_REQUEST["smenu"];
-echo "Sub Group: ".$compName = $_REQUEST["cpName"];
-
 
 if ($grp_id && $sgrp_id) {
-    $sqlquery = "select grp.group_name, sgrp.subgroup_name, sgrp.description, sgrp.active_status from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.group_id='" . $grp_id . "' and sgrp.subgroup_id='" . $sgrp_id . "' and sgrp.companyName='" . $compName . "'";
+    $sqlquery = "select grp.group_name, sgrp.subgroup_name, sgrp.description, sgrp.active_status from group_detail grp,subgroup_detail sgrp where grp.group_id=sgrp.group_id and grp.group_id='" . $grp_id . "' and sgrp.subgroup_id='" . $sgrp_id . "' and sgrp.login='" . $login_form . "'";
     $result = mysql_query($sqlquery) or die('mysql error:' . mysql_error());
 
     while($row = mysql_fetch_row($result)){
@@ -33,7 +31,7 @@ if($msg_alert==""){
     $msg=$msg_alert;
 }
 
-user_session($login_form,$sess_id,$msg,$compName);
+user_session($login_form,$sess_id,$msg);
 
 hheader($smenu);
 tree_code ();
@@ -119,11 +117,6 @@ if(!$sgrp_id){
                             </TR>
                             <tr height="8px" bgcolor="#D9D9A8"><td colspan="3"></td></tr>
 
-<!-- Hidden Company name field -->
-                            <td align="left" valign="top" class="WorkGreen">
-                                    <input type="hidden" name="companyName" value="<? echo $compName;  ?>" size="45" class="input"/>
-                            </TD>
-
                             <tr height="16" bgcolor="#D9D9A8">
                                 <td align="center" class="WorkGreen" colspan="3"><input type="button" class="submit1" value="Modify Here!!!" onclick="subgroup_submit('subgroup_modify');" style="background-image:url('images/menu1.gif');" tabindex="33"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             </tr>
@@ -138,7 +131,6 @@ if(!$sgrp_id){
     print "<input type=\"hidden\" name=\"grp_name\" value=" . $grp_name . ">";
     print "<input type=\"hidden\" name=\"sgrp_name\" value=" . $sgrp_name . ">";
     print "<input type=\"hidden\" name=\"sgrp_id\" value=" . $sgrp_id . ">";
-    print "<input type=\"hidden\" name=\"cpName\" value='" . $compName. "'>";
 ?>
                         </table>
                     </td>
